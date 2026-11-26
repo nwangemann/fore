@@ -35,40 +35,23 @@ Expo SDK 58 and Expo Router (web first; iOS and Android build from the same code
 ## Architecture
 
 ```mermaid
-flowchart LR
-  subgraph APIs["Free, keyless APIs"]
-    OM["Open-Meteo<br/>forecast · air · archive · geocoding"]
-    NWS["US National Weather Service<br/>alerts"]
-  end
-
-  subgraph services["src/services (network)"]
-    S["openMeteo.ts · nws.ts · location.ts"]
-  end
-
-  subgraph core["src/core (pure TypeScript)"]
-    C["parsing · weather codes · course variant<br/>seasonal par · AQI bands · local time<br/>screen-reader sentences"]
-  end
-
-  subgraph query["TanStack Query"]
-    Q["useDashboard<br/>forecast · air · alerts · archive<br/>keyed by place"]
-    P[("persisted cache<br/>AsyncStorage / localStorage")]
-  end
-
-  subgraph ui["src/features + app/ (React)"]
-    F["dashboard · forecast · air · alerts · course"]
-  end
-
+flowchart TB
+  APIs["Open-Meteo · US NWS<br/>free, keyless APIs"]
+  S["src/services<br/>fetch: openMeteo · nws · location"]
+  C["src/core (pure TypeScript)<br/>parsing · weather codes · seasonal par<br/>AQI · local time · course variant"]
+  Q["TanStack Query: useDashboard<br/>forecast · air · alerts · archive, keyed by place"]
+  P[("persisted query cache<br/>localStorage on web")]
   ST[("src/state<br/>zustand settings")]
+  F["src/features + app/<br/>dashboard · forecast · air · alerts · course"]
 
-  OM --> S
-  NWS --> S
-  S -- "parse with" --> C
+  APIs --> S
+  S -- parse with --> C
   S --> Q
   Q <--> P
-  ST -- "place, units" --> Q
+  ST -- place, units --> Q
   Q --> F
-  F -- "rules and wording" --> C
-  F -- "Change course" --> ST
+  F -- rules and wording --> C
+  F -- Change course --> ST
 ```
 
 `src/core` has no React or Expo imports, so the rules are plain functions with unit tests. Services fetch and parse; `useDashboard` composes one query per source, every key carrying the place, so switching course never shows the old course's data. More in [docs/architecture.md](docs/architecture.md) and the [decision records](docs/adr/).
