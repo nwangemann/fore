@@ -15,6 +15,7 @@ Verified by the agent, in the web preview against live APIs and in CI:
 - **Accessibility (5.2):** keyboard-only walk with a visible focus ring; one spoken sentence per hour and per scorecard day; every text pair at WCAG AA (ADR 10).
 - **Tests (6.1–6.3):** service tests fail when a parsed field disappears; the Playwright smoke test passes offline against fixtures; both run in CI.
 - **Theme (7.1–7.2):** the course follows the sky; `?course=` forces a variant; every card meets AA in every variant (ADR 11).
+- **Live demo:** green pushes to `main` deploy to https://nwangemann.github.io/fore/ (ADR 12); the subpath build was checked locally before the first deploy.
 - **Docs (8.1–8.2):** README and AI workflow render on GitHub with images and the diagram; relative links resolve.
 
 Not verified:

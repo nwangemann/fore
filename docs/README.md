@@ -1,5 +1,7 @@
 # fore! docs
 
+Live demo: https://nwangemann.github.io/fore/
+
 ## Quick start
 
 1. Node 22.13+, 24.3+ or 26+ on PATH.
@@ -11,7 +13,7 @@
 ## Index
 
 - [Architecture](architecture.md): folders, data flow, features, testing and CI
-- [Decisions](adr/): eleven short ADRs
+- [Decisions](adr/): twelve short ADRs
 - [Standards](standards.md), including accessibility
 - [Data sources](data-sources.md) and [dependencies](dependencies.md)
 - [How fore! was built with an AI agent](ai-workflow.md)

@@ -2,6 +2,8 @@
 
 [![check](https://github.com/nwangemann/fore/actions/workflows/check.yml/badge.svg)](https://github.com/nwangemann/fore/actions/workflows/check.yml)
 
+**Live demo: [nwangemann.github.io/fore](https://nwangemann.github.io/fore/)**
+
 A golf-themed weather dashboard for one home place. Built with Expo and Expo Router, web first, on free and keyless weather data.
 
 <p>
@@ -75,7 +77,7 @@ npm run check      # types, lint, formatting, unit and service tests, docs check
 npm run test:e2e   # Playwright smoke test; first run: npx playwright install --only-shell chromium
 ```
 
-CI runs `check` and `e2e` on every push and pull request. More in [docs/README.md](docs/README.md).
+CI runs `check` and `e2e` on every push and pull request; green pushes to `main` deploy the live demo to GitHub Pages ([ADR 12](docs/adr/0012-github-pages-demo.md)). More in [docs/README.md](docs/README.md).
 
 ## Built with an AI agent
 
