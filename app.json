@@ -9,7 +9,7 @@
     "scheme": "fore",
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.nate.fore"
+      "bundleIdentifier": "io.github.nwangemann.fore"
     },
     "android": {
       "adaptiveIcon": {

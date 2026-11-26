@@ -1,6 +1,6 @@
 # Backlog
 
-**Next step: 1.3 Remove personal and machine details** ([trim.md](trim.md)).
+**Next step: 2.1 Create and push** ([publish.md](publish.md)).
 
 ## State
 
@@ -15,7 +15,7 @@ Each section is a file of session-sized steps. Do one step per session, in order
 
 | #   | Section                                          | Steps |
 | --- | ------------------------------------------------ | ----- |
-| 1   | [Trim scope and docs](trim.md)                   | 2/3   |
+| 1   | [Trim scope and docs](trim.md)                   | 3/3   |
 | 2   | [Publish on GitHub](publish.md)                  | 0/1   |
 | 3   | [TanStack Query data layer](tanstack-query.md)   | 0/2   |
 | 4   | [SVG weather icons](icons.md)                    | 0/2   |
@@ -36,6 +36,7 @@ From the earlier queue; pick one up only after the roadmap.
 - Moon phase and golden hour: computable offline; no new source.
 - Quip variety and Mulligan: several quips per condition, rotated daily; a re-roll button (explorations 14–15).
 - Offline service worker: cache the app shell so the home-screen app opens with no signal.
+- Local Node on PATH: this Mac keeps Node in a folder outside the shell path, so the portable `fore-web` launch config fails until that folder is added to the shell profile (outside the repo).
 
 ## Rules
 

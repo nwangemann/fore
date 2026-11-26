@@ -1,4 +1,4 @@
-fore! is a personal weather dashboard built with Expo and Expo Router. Web is the main target (ADR 2); the same code runs on iOS when native location is worth it.
+fore! is a personal weather dashboard built with Expo and Expo Router. Web is the main target (ADR 2); the same Expo code can also build for iOS and Android, but those builds are untested.
 
 ## Expo APIs
 

@@ -1,6 +1,6 @@
 # fore!
 
-A small, cheeky, personal weather dashboard. The fore-cast for one home course, with golf jokes.
+A small, cheeky, personal weather dashboard. The fore-cast for one home course, with golf jokes. Built with Expo for the web first.
 
 - Now: temperature, "plays like", conditions with a quip, caddie notes.
 - The front nine: the next 18 hours, split at the turn.

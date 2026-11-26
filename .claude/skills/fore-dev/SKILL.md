@@ -7,12 +7,7 @@ description: Set up the shell, run, check and preview the fore! Expo web dashboa
 
 ## Environment
 
-Node lives in `~/.local/node`, not on the shell path. Run this first in every new terminal:
-
-```bash
-export PATH="$HOME/.local/node/bin:/opt/homebrew/bin:$PATH"
-export LANG=en_US.UTF-8
-```
+Node 22.13+ (or 24.3+, 26+) must be on PATH. If `node` is not found, add your Node install's `bin` folder to PATH first. Set `LANG=en_US.UTF-8` if tools complain about the locale.
 
 ## Commands
 
@@ -23,7 +18,7 @@ export LANG=en_US.UTF-8
 
 ## Preview pane
 
-`.claude/launch.json` defines `fore-web` on port 8082 (stellar may hold 8081).
+`.claude/launch.json` defines `fore-web` as `npm run web -- --port 8082`, so it does not clash with another Expo app on 8081.
 
 ## Gotchas
 

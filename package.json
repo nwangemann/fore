@@ -1,6 +1,12 @@
 {
   "name": "fore",
   "version": "0.1.0",
+  "description": "A small, cheeky, personal weather dashboard with golf jokes. Web-first Expo.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nwangemann/fore.git"
+  },
+  "homepage": "https://github.com/nwangemann/fore#readme",
   "main": "expo-router/entry",
   "dependencies": {
     "@expo-google-fonts/shrikhand": "^0.4.1",
