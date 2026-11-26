@@ -8,12 +8,27 @@ export class LocationDenied extends Error {
   }
 }
 
-/** Asks for permission if needed, reads a coarse fix, and names it. */
-export async function currentPlace(): Promise<Place> {
+/** Asks for permission if needed and reads a coarse fix. */
+export async function currentCoords(): Promise<{ latitude: number; longitude: number }> {
   const { granted } = await Location.requestForegroundPermissionsAsync();
   if (!granted) throw new LocationDenied();
   const pos = await Location.getCurrentPositionAsync({ accuracy: Location.Accuracy.Balanced });
-  const { latitude, longitude } = pos.coords;
+  return { latitude: pos.coords.latitude, longitude: pos.coords.longitude };
+}
+
+/** Reads the device location and names it. */
+export async function currentPlace(): Promise<Place> {
+  return placeAt(await currentCoords());
+}
+
+/** Names coordinates, falling back to a coordinate label. */
+export async function placeAt({
+  latitude,
+  longitude,
+}: {
+  latitude: number;
+  longitude: number;
+}): Promise<Place> {
   try {
     return await nameFor(latitude, longitude);
   } catch {

@@ -4,8 +4,12 @@ import type { Alert } from '@/core/alerts/alerts';
 import { color, font, radius, space } from '@/ui/tokens';
 
 /** "Fore!" is the warning shout, so official alerts get the loudest card. */
-export function AlertBanner({ alerts }: { alerts: Alert[] }) {
+export function AlertBanner({ alerts, failed }: { alerts: Alert[]; failed: boolean }) {
   const [open, setOpen] = useState<string | null>(null);
+  if (failed)
+    return (
+      <Text style={styles.failed}>Couldn’t reach the National Weather Service for alerts.</Text>
+    );
   if (!alerts.length) return null;
   return (
     <View style={styles.wrap}>
@@ -42,5 +46,11 @@ const styles = StyleSheet.create({
   headline: { fontFamily: font.medium, color: color.paper, fontSize: 14 },
   body: { fontFamily: font.body, color: color.paper, fontSize: 14, marginTop: space.sm },
   bold: { fontFamily: font.bold },
+  failed: {
+    fontFamily: font.medium,
+    color: color.sand,
+    fontSize: 13,
+    marginBottom: space.lg,
+  },
   more: { fontFamily: font.body, color: color.paper, opacity: 0.8, fontSize: 12 },
 });

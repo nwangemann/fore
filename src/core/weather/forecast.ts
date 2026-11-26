@@ -12,6 +12,7 @@ export type Current = {
   windGusts: number;
   windDirection: number;
   uvIndex: number;
+  /** Always hPa; the UI converts. */
   pressure: number;
   cloudCover: number;
   /** Raw Open-Meteo visibility: feet in imperial, metres in metric. */
@@ -22,9 +23,14 @@ export type Current = {
 export type Hour = {
   time: string;
   temperature: number;
+  feelsLike: number;
   precipChance: number;
+  /** Amount in the hour, in the request's precipitation unit. */
+  precipitation: number;
   code: number;
   isDay: boolean;
+  windSpeed: number;
+  pressure: number;
 };
 
 export type Day = {
@@ -40,12 +46,24 @@ export type Day = {
   windMax: number;
 };
 
+/** A 15-minute step of the short-range precipitation forecast. */
+export type Slot = { time: string; precipitation: number };
+
+export type PressureTrend = 'rising' | 'falling' | 'steady';
+
 export type Forecast = {
   timezone: string;
   current: Current;
   /** Starts at the current hour. */
   hours: Hour[];
+  /** Starts today. */
   days: Day[];
+  yesterday: Day | null;
+  /** The hour 24 hours before the current one. */
+  sameHourYesterday: Hour | null;
+  pressureTrend: PressureTrend | null;
+  /** Next two hours in 15-minute steps, starting with the current one. */
+  nowcast: Slot[];
 };
 
 export const CURRENT_FIELDS = [
@@ -66,9 +84,13 @@ export const CURRENT_FIELDS = [
 ] as const;
 export const HOURLY_FIELDS = [
   'temperature_2m',
+  'apparent_temperature',
   'precipitation_probability',
+  'precipitation',
   'weather_code',
   'is_day',
+  'wind_speed_10m',
+  'pressure_msl',
 ] as const;
 export const DAILY_FIELDS = [
   'weather_code',
@@ -81,6 +103,7 @@ export const DAILY_FIELDS = [
   'uv_index_max',
   'wind_speed_10m_max',
 ] as const;
+export const MINUTELY_FIELDS = ['precipitation'] as const;
 
 type Series = Record<string, (number | string | null)[] | undefined>;
 type Raw = {
@@ -88,13 +111,20 @@ type Raw = {
   current?: Record<string, number | string | null>;
   hourly?: Series;
   daily?: Series;
+  minutely_15?: Series;
 };
 
 const num = (v: unknown): number => (typeof v === 'number' ? v : 0);
 const str = (v: unknown): string => (typeof v === 'string' ? v : '');
 
-/** Turns an Open-Meteo /v1/forecast response into the dashboard's model. */
-export function parseForecast(json: unknown, hourCount = 24): Forecast {
+/** Pressure change over three hours that counts as a trend, in hPa. */
+const TREND_HPA = 1;
+
+/**
+ * Turns an Open-Meteo /v1/forecast response into the dashboard's model.
+ * Expects `past_days=1` so yesterday and the pressure trend are available.
+ */
+export function parseForecast(json: unknown, hourCount = 48): Forecast {
   const raw = json as Raw;
   const cur = raw.current;
   if (!cur || !raw.hourly || !raw.daily) throw new Error('Forecast response is missing sections');
@@ -118,20 +148,37 @@ export function parseForecast(json: unknown, hourCount = 24): Forecast {
 
   const h = raw.hourly;
   const times = (h.time ?? []).map(str);
-  const start = Math.max(0, times.indexOf(hourKey(current.time)));
-  const hours: Hour[] = times.slice(start, start + hourCount).map((time, j) => {
-    const i = start + j;
+  const hourAt = (i: number): Hour | null => {
+    const time = times[i];
+    if (time === undefined || i < 0) return null;
     return {
       time,
       temperature: num(h.temperature_2m?.[i]),
+      feelsLike: num(h.apparent_temperature?.[i]),
       precipChance: num(h.precipitation_probability?.[i]),
+      precipitation: num(h.precipitation?.[i]),
       code: num(h.weather_code?.[i]),
       isDay: h.is_day?.[i] === 1,
+      windSpeed: num(h.wind_speed_10m?.[i]),
+      pressure: num(h.pressure_msl?.[i]),
     };
-  });
+  };
+  const start = Math.max(0, times.indexOf(hourKey(current.time)));
+  const hours: Hour[] = [];
+  for (let i = start; i < Math.min(times.length, start + hourCount); i++) {
+    const x = hourAt(i);
+    if (x) hours.push(x);
+  }
+  const before = hourAt(start - 3);
+  const now = hourAt(start);
+  let pressureTrend: PressureTrend | null = null;
+  if (before && now) {
+    const change = now.pressure - before.pressure;
+    pressureTrend = change >= TREND_HPA ? 'rising' : change <= -TREND_HPA ? 'falling' : 'steady';
+  }
 
   const d = raw.daily;
-  const days: Day[] = (d.time ?? []).map((date, i) => ({
+  const allDays: Day[] = (d.time ?? []).map((date, i) => ({
     date: str(date),
     code: num(d.weather_code?.[i]),
     high: num(d.temperature_2m_max?.[i]),
@@ -143,6 +190,27 @@ export function parseForecast(json: unknown, hourCount = 24): Forecast {
     uvMax: num(d.uv_index_max?.[i]),
     windMax: num(d.wind_speed_10m_max?.[i]),
   }));
+  const todayIndex = Math.max(
+    0,
+    allDays.findIndex((x) => x.date === current.time.slice(0, 10)),
+  );
 
-  return { timezone: str(raw.timezone), current, hours, days };
+  const m = raw.minutely_15;
+  const slotTimes = (m?.time ?? []).map(str);
+  const slotKey = slotTimes.filter((t) => t <= current.time).pop();
+  const slotStart = slotKey ? slotTimes.indexOf(slotKey) : 0;
+  const nowcast: Slot[] = slotTimes
+    .slice(slotStart, slotStart + 8)
+    .map((time, j) => ({ time, precipitation: num(m?.precipitation?.[slotStart + j]) }));
+
+  return {
+    timezone: str(raw.timezone),
+    current,
+    hours,
+    days: allDays.slice(todayIndex),
+    yesterday: allDays[todayIndex - 1] ?? null,
+    sameHourYesterday: hourAt(start - 24),
+    pressureTrend,
+    nowcast,
+  };
 }

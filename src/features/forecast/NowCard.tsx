@@ -1,17 +1,39 @@
 import { StyleSheet, Text, View } from 'react-native';
+import type { Normal } from '@/core/climate/normals';
 import { unitLabels, type Units } from '@/core/units';
 import { condition, iconFor } from '@/core/weather/codes';
 import type { Forecast } from '@/core/weather/forecast';
+import { clockLabel, minutesBetween } from '@/core/weather/localTime';
+import {
+  bestTeeTime,
+  inTheBag,
+  nowcastLine,
+  rainOutlook,
+  versusNormal,
+  versusYesterday,
+} from '@/core/weather/outlook';
 import { caddieNotes, scoreDay } from '@/core/weather/score';
 import { deg } from '@/ui/format';
 import { color, font, moodColor, radius, space } from '@/ui/tokens';
 
-export function NowCard({ forecast, units }: { forecast: Forecast; units: Units }) {
-  const { current } = forecast;
+type Props = { forecast: Forecast; units: Units; normal: Normal | null };
+
+export function NowCard({ forecast, units, normal }: Props) {
+  const { current, hours } = forecast;
   const today = forecast.days[0];
   const sky = condition(current.code);
-  const notes = caddieNotes(current, today, units);
-  const score = today ? scoreDay(today, units) : null;
+  const notes = caddieNotes(current, units);
+  const score = today ? scoreDay(today, units, normal) : null;
+  const nowcast = nowcastLine(forecast.nowcast, sky.mood === 'snow');
+  const outlook = rainOutlook(hours, units);
+  const bag = inTheBag(hours, today, units);
+  const tee = bestTeeTime(hours, units, forecast.days);
+  const context = [
+    versusYesterday(current.temperature, forecast.sameHourYesterday, units),
+    today ? versusNormal(today.high, normal, units) : null,
+  ].filter(Boolean);
+  const precip = unitLabels[units].precip;
+
   return (
     <View style={[styles.card, { backgroundColor: moodColor[sky.mood] }]}>
       <View style={styles.top}>
@@ -31,12 +53,49 @@ export function NowCard({ forecast, units }: { forecast: Forecast; units: Units 
         ) : null}
       </View>
       <Text style={styles.quip}>“{sky.quip}”</Text>
+      {context.length ? <Text style={styles.context}>{context.join(' · ')}</Text> : null}
+
+      <View style={styles.outlook}>
+        {nowcast ? <Text style={styles.nowcast}>⏱ {nowcast}</Text> : null}
+        <Text style={styles.outlookText}>{outlook}</Text>
+      </View>
+
       <View style={styles.facts}>
         <Fact label="Plays like" value={deg(current.feelsLike)} />
         {today ? <Fact label="High" value={deg(today.high)} /> : null}
         {today ? <Fact label="Low" value={deg(today.low)} /> : null}
-        {today ? <Fact label="Rain" value={`${Math.round(today.precipChance)}%`} /> : null}
+        {today ? (
+          <Fact
+            label="Rain today"
+            value={`${today.precipSum.toFixed(units === 'imperial' ? 2 : 1)} ${precip}`}
+          />
+        ) : null}
       </View>
+
+      {bag.length || tee ? (
+        <View style={styles.row}>
+          {bag.length ? (
+            <View style={styles.panel}>
+              <Text style={styles.panelHead}>In the bag</Text>
+              <View style={styles.chips}>
+                {bag.map((b) => (
+                  <Text key={b.label} style={styles.chip}>
+                    {b.icon} {b.label}
+                  </Text>
+                ))}
+              </View>
+            </View>
+          ) : null}
+          {tee ? (
+            <View style={styles.panel}>
+              <Text style={styles.panelHead}>Best tee time {tee.when}</Text>
+              <Text style={styles.tee}>{tee.label}</Text>
+              {tee.soggy ? <Text style={styles.small}>Least wet, not dry.</Text> : null}
+            </View>
+          ) : null}
+        </View>
+      ) : null}
+
       {notes.length ? (
         <View style={styles.notes}>
           <Text style={styles.notesHead}>Caddie says</Text>
@@ -47,6 +106,21 @@ export function NowCard({ forecast, units }: { forecast: Forecast; units: Units 
           ))}
         </View>
       ) : null}
+
+      {today?.sunrise ? <SunStrip sunrise={today.sunrise} sunset={today.sunset} /> : null}
+    </View>
+  );
+}
+
+function SunStrip({ sunrise, sunset }: { sunrise: string; sunset: string }) {
+  const mins = minutesBetween(sunrise, sunset);
+  return (
+    <View style={styles.sun}>
+      <Text style={styles.sunText}>🌅 First tee {clockLabel(sunrise)}</Text>
+      <Text style={styles.sunText}>🌇 Last light {clockLabel(sunset)}</Text>
+      <Text style={styles.sunText}>
+        {Math.floor(mins / 60)} h {mins % 60} m of daylight
+      </Text>
     </View>
   );
 }
@@ -59,6 +133,9 @@ function Fact({ label, value }: { label: string; value: string }) {
     </View>
   );
 }
+
+const glass = 'rgba(255,255,255,0.14)';
+const shade = 'rgba(0,0,0,0.18)';
 
 const styles = StyleSheet.create({
   card: { borderRadius: radius.lg, padding: space.xl, gap: space.md },
@@ -86,9 +163,13 @@ const styles = StyleSheet.create({
   },
   badgeText: { fontFamily: font.display, fontSize: 18, color: color.flag },
   quip: { fontFamily: font.medium, fontSize: 18, color: color.paper, fontStyle: 'italic' },
+  context: { fontFamily: font.medium, fontSize: 14, color: color.sand },
+  outlook: { backgroundColor: shade, borderRadius: radius.sm, padding: space.md, gap: space.xs },
+  nowcast: { fontFamily: font.bold, fontSize: 15, color: color.sand },
+  outlookText: { fontFamily: font.bold, fontSize: 16, color: color.paper },
   facts: { flexDirection: 'row', flexWrap: 'wrap', gap: space.sm },
   fact: {
-    backgroundColor: 'rgba(255,255,255,0.14)',
+    backgroundColor: glass,
     borderRadius: radius.sm,
     paddingVertical: space.sm,
     paddingHorizontal: space.md,
@@ -101,12 +182,41 @@ const styles = StyleSheet.create({
     textTransform: 'uppercase',
   },
   factValue: { fontFamily: font.bold, fontSize: 20, color: color.paper },
-  notes: {
-    backgroundColor: 'rgba(0,0,0,0.18)',
+  row: { flexDirection: 'row', flexWrap: 'wrap', gap: space.sm },
+  panel: {
+    flexGrow: 1,
+    flexBasis: 180,
+    backgroundColor: glass,
     borderRadius: radius.sm,
     padding: space.md,
-    gap: 2,
+    gap: space.xs,
   },
-  notesHead: { fontFamily: font.bold, color: color.sand, fontSize: 12, textTransform: 'uppercase' },
+  panelHead: {
+    fontFamily: font.bold,
+    color: color.sand,
+    fontSize: 12,
+    textTransform: 'uppercase',
+  },
+  chips: { flexDirection: 'row', flexWrap: 'wrap', gap: space.sm },
+  chip: { fontFamily: font.medium, fontSize: 15, color: color.paper },
+  tee: { fontFamily: font.display, fontSize: 22, color: color.paper },
+  small: { fontFamily: font.body, fontSize: 12, color: color.sand },
+  notes: { backgroundColor: shade, borderRadius: radius.sm, padding: space.md, gap: 2 },
+  notesHead: {
+    fontFamily: font.bold,
+    color: color.sand,
+    fontSize: 12,
+    textTransform: 'uppercase',
+  },
   note: { fontFamily: font.body, color: color.paper, fontSize: 14 },
+  sun: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    columnGap: space.lg,
+    rowGap: space.xs,
+    borderTopWidth: 1,
+    borderColor: 'rgba(255,255,255,0.2)',
+    paddingTop: space.md,
+  },
+  sunText: { fontFamily: font.medium, fontSize: 13, color: color.paper },
 });

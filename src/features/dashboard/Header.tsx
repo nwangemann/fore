@@ -3,9 +3,15 @@ import { ActivityIndicator, Pressable, StyleSheet, Text, View } from 'react-nati
 import type { Place } from '@/core/place/place';
 import { color, font, radius, space } from '@/ui/tokens';
 
-type Props = { place: Place; loading: boolean; updatedAt: Date | null; onRefresh: () => void };
+type Props = {
+  place: Place;
+  loading: boolean;
+  updatedAt: Date | null;
+  fromCache: boolean;
+  onRefresh: () => void;
+};
 
-export function Header({ place, loading, updatedAt, onRefresh }: Props) {
+export function Header({ place, loading, updatedAt, fromCache, onRefresh }: Props) {
   return (
     <View style={styles.wrap}>
       <View style={styles.brand}>
@@ -41,11 +47,20 @@ export function Header({ place, loading, updatedAt, onRefresh }: Props) {
       </View>
       {updatedAt ? (
         <Text style={styles.updated}>
-          Card signed {updatedAt.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}
+          {fromCache ? 'From your last visit, signed ' : 'Card signed '}
+          {signedLabel(updatedAt)}
+          {fromCache ? ' · updating…' : ''}
         </Text>
       ) : null}
     </View>
   );
+}
+
+/** "7:57 PM" today, "Tue 7:57 PM" on another day. */
+function signedLabel(at: Date): string {
+  const time = at.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
+  if (at.toDateString() === new Date().toDateString()) return time;
+  return `${at.toLocaleDateString([], { weekday: 'short' })} ${time}`;
 }
 
 const styles = StyleSheet.create({
@@ -92,5 +107,5 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   reteeText: { fontFamily: font.bold, color: color.ink, fontSize: 15 },
-  updated: { fontFamily: font.body, color: color.sand, fontSize: 12, opacity: 0.85 },
+  updated: { fontFamily: font.medium, color: color.sand, fontSize: 13 },
 });

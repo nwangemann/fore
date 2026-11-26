@@ -10,6 +10,7 @@
 ## Index
 
 - [Backlog](backlog/README.md)
+- [Review and explorations, 2026-11-25](review-2026-11-25.md)
 - [Handoff: current state](handoff.md)
 - [Architecture](architecture.md)
 - [Data sources and what else is out there](data-sources.md)

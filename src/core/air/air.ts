@@ -7,6 +7,8 @@ export type Air = {
   ozone: number | null;
   /** Only species the model covers here. Empty outside Europe. */
   pollen: Pollen[];
+  /** Worst AQI in the next 24 hours, when it is in a worse band than now. */
+  peak: { aqi: number; time: string } | null;
 };
 
 export const POLLEN_SPECIES = {
@@ -24,20 +26,44 @@ export const AIR_FIELDS = ['us_aqi', 'pm2_5', 'pm10', 'ozone', ...Object.keys(PO
 const maybe = (v: unknown): number | null => (typeof v === 'number' ? v : null);
 
 export function parseAir(json: unknown): Air {
-  const cur = (json as { current?: Record<string, unknown> }).current;
+  const raw = json as {
+    current?: Record<string, unknown>;
+    hourly?: { time?: string[]; us_aqi?: (number | null)[] };
+  };
+  const cur = raw.current;
   if (!cur) throw new Error('Air quality response is missing current values');
   const pollen: Pollen[] = [];
   for (const [key, name] of Object.entries(POLLEN_SPECIES) as [PollenKey, string][]) {
     const value = maybe(cur[key]);
     if (value !== null) pollen.push({ key, name, value });
   }
+  const usAqi = maybe(cur.us_aqi);
+  const now = typeof cur.time === 'string' ? cur.time : '';
+  let peak: Air['peak'] = null;
+  const times = raw.hourly?.time ?? [];
+  times.forEach((time, i) => {
+    const aqi = raw.hourly?.us_aqi?.[i];
+    if (typeof aqi !== 'number' || time <= now || time > shiftDay(now)) return;
+    if (!peak || aqi > peak.aqi) peak = { aqi, time };
+  });
+  const p = peak as Air['peak'];
+  if (p && (usAqi === null || aqiBand(p.aqi).level <= aqiBand(usAqi).level)) peak = null;
   return {
-    usAqi: maybe(cur.us_aqi),
+    peak,
+    usAqi,
     pm25: maybe(cur.pm2_5),
     pm10: maybe(cur.pm10),
     ozone: maybe(cur.ozone),
     pollen,
   };
+}
+
+/** "2026-11-25T20:00" → "2026-11-26T20:00", as text. */
+function shiftDay(t: string): string {
+  if (!t) return t;
+  const d = new Date(`${t.slice(0, 10)}T00:00:00Z`);
+  d.setUTCDate(d.getUTCDate() + 1);
+  return `${d.toISOString().slice(0, 10)}${t.slice(10)}`;
 }
 
 export type Band = { label: string; quip: string; level: 0 | 1 | 2 | 3 | 4 | 5 };

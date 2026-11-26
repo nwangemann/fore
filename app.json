@@ -26,7 +26,8 @@
       "bundler": "metro",
       "output": "single",
       "name": "fore!",
-      "themeColor": "#1F5C3A"
+      "themeColor": "#1F5C3A",
+      "description": "A cheeky personal weather dashboard."
     },
     "plugins": [
       "expo-router",

@@ -7,11 +7,11 @@ import { Card } from '@/ui/Card';
 import { deg } from '@/ui/format';
 import { color, font, radius, space } from '@/ui/tokens';
 
-/** The next 18 hours, split at "the turn" like a round of golf. */
+/** The next 18 hours as a round: front nine, the turn, back nine. */
 export function FrontNine({ hours }: { hours: Hour[] }) {
   const round = hours.slice(0, 18);
   return (
-    <Card title="The front nine" kicker="next 18 hours">
+    <Card title="The round" kicker="next 18 hours">
       <ScrollView
         horizontal
         showsHorizontalScrollIndicator={false}
@@ -25,7 +25,6 @@ export function FrontNine({ hours }: { hours: Hour[] }) {
               </View>
             ) : null}
             <View style={[styles.hole, i === 0 && styles.now]}>
-              <Text style={styles.num}>{i + 1}</Text>
               <Text style={styles.time}>{i === 0 ? 'Now' : hourLabel(h.time)}</Text>
               <Text style={styles.icon}>{iconFor(h.code, h.isDay)}</Text>
               <Text style={styles.temp}>{deg(h.temperature)}</Text>
@@ -52,7 +51,6 @@ const styles = StyleSheet.create({
     gap: 2,
   },
   now: { backgroundColor: color.sand, borderColor: color.sand },
-  num: { fontFamily: font.bold, fontSize: 10, color: color.pencil },
   time: { fontFamily: font.medium, fontSize: 12, color: color.inkSoft },
   icon: { fontSize: 24 },
   temp: { fontFamily: font.bold, fontSize: 18, color: color.ink },

@@ -3,7 +3,8 @@ import type { Units } from '@/core/units';
 import { iconFor } from '@/core/weather/codes';
 import type { Day } from '@/core/weather/forecast';
 import { weekdayLabel } from '@/core/weather/localTime';
-import { scoreDay, scoreMark, type DayScore } from '@/core/weather/score';
+import type { Normal } from '@/core/climate/normals';
+import { bestDay, deltaFromC, scoreDay, scoreMark, type DayScore } from '@/core/weather/score';
 import { Card } from '@/ui/Card';
 import { deg } from '@/ui/format';
 import { color, font, space } from '@/ui/tokens';
@@ -12,10 +13,16 @@ import { color, font, space } from '@/ui/tokens';
  * The week as a golf scorecard. Each day is a hole; under par is circled and
  * over par is boxed, as on a real card.
  */
-export function Scorecard({ days, units }: { days: Day[]; units: Units }) {
+type Props = { days: Day[]; units: Units; normals: Record<string, Normal | null> };
+
+export function Scorecard({ days, units, normals }: Props) {
   const week = days.slice(0, 7);
-  const scores = week.map((d) => scoreDay(d, units));
-  const total = scores.reduce((n, s) => n + (s.strokes ?? 0), 0);
+  const par = week.map((d) => normals[d.date] ?? null);
+  const scores = week.map((d, i) => scoreDay(d, units, par[i]));
+  const best = bestDay(scores);
+  const bestDate = best === null ? null : week[best];
+  const toUnit = (c: number) => (units === 'imperial' ? deltaFromC(c, units) + 32 : c);
+  const hasPar = par.some(Boolean);
   return (
     <Card title="Scorecard" kicker="7-day fore-cast">
       <View style={styles.table}>
@@ -23,6 +30,11 @@ export function Scorecard({ days, units }: { days: Day[]; units: Units }) {
           {week.map((d, i) => cell(i, i === 0 ? 'Today' : weekdayLabel(d.date), styles.head))}
         </Row>
         <Row label="Sky">{week.map((d, i) => cell(i, iconFor(d.code, true), styles.icon))}</Row>
+        {hasPar ? (
+          <Row label="Par">
+            {par.map((n, i) => cell(i, n ? deg(toUnit(n.high)) : '–', styles.par))}
+          </Row>
+        ) : null}
         <Row label="High">{week.map((d, i) => cell(i, deg(d.high), styles.big))}</Row>
         <Row label="Low">{week.map((d, i) => cell(i, deg(d.low), styles.soft))}</Row>
         <Row label="Rain">
@@ -36,10 +48,15 @@ export function Scorecard({ days, units }: { days: Day[]; units: Units }) {
           ))}
         </Row>
       </View>
-      <Text style={styles.total}>
-        Week total: <Text style={styles.totalNum}>{scoreMark({ strokes: total, label: '' })}</Text>
-        {'  '}
-        <Text style={styles.legend}>○ under par · □ over par · — weather delay</Text>
+      {bestDate ? (
+        <Text style={styles.total}>
+          Best day to play:{' '}
+          <Text style={styles.totalNum}>{best === 0 ? 'Today' : weekdayLabel(bestDate.date)}</Text>
+        </Text>
+      ) : null}
+      <Text style={styles.legend}>
+        {hasPar ? 'Par is a normal day here for the time of year (10-year average high). ' : ''}○
+        under par · □ over par · — weather delay
       </Text>
     </Card>
   );
@@ -105,6 +122,7 @@ const styles = StyleSheet.create({
   head: { fontFamily: font.bold, fontSize: 12, color: color.ink },
   icon: { fontSize: 22 },
   big: { fontFamily: font.bold, fontSize: 16, color: color.ink },
+  par: { fontFamily: font.medium, fontSize: 13, color: color.fairway, fontStyle: 'italic' },
   soft: { fontFamily: font.body, fontSize: 13, color: color.inkSoft },
   mark: {
     width: 34,
@@ -118,5 +136,5 @@ const styles = StyleSheet.create({
   markText: { fontFamily: font.bold, fontSize: 14 },
   total: { marginTop: space.md, fontFamily: font.medium, color: color.ink, fontSize: 14 },
   totalNum: { fontFamily: font.display, fontSize: 18, color: color.flag },
-  legend: { fontFamily: font.body, fontSize: 12, color: color.pencil },
+  legend: { fontFamily: font.body, fontSize: 12, color: color.pencil, marginTop: space.xs },
 });

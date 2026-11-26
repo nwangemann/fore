@@ -1,10 +1,15 @@
 import { StyleSheet, Text, View } from 'react-native';
 import { compassPoint, unitLabels, visibilityToDistance, type Units } from '@/core/units';
 import type { Forecast } from '@/core/weather/forecast';
-import { clockLabel, minutesBetween } from '@/core/weather/localTime';
 import { Card } from '@/ui/Card';
 import { deg, pct, speed } from '@/ui/format';
 import { color, font, radius, space } from '@/ui/tokens';
+
+const trendNote = {
+  rising: '↗ rising: settling down',
+  falling: '↘ falling: change on the way',
+  steady: '→ steady',
+} as const;
 
 type Stat = { label: string; value: string; note?: string; icon: string };
 
@@ -33,22 +38,16 @@ export function YardageBook({ forecast, units }: { forecast: Forecast; units: Un
       label: 'Visibility',
       value: `${vis >= 10 ? Math.round(vis) : vis.toFixed(1)} ${unitLabels[units].distance}`,
     },
-    { icon: '🎈', label: 'Pressure', value: `${Math.round(c.pressure)} hPa` },
+    {
+      icon: '🎈',
+      label: 'Pressure',
+      value:
+        units === 'imperial'
+          ? `${(c.pressure * 0.02953).toFixed(2)} inHg`
+          : `${Math.round(c.pressure)} hPa`,
+      note: forecast.pressureTrend ? trendNote[forecast.pressureTrend] : undefined,
+    },
   ];
-  if (today) {
-    stats.push({
-      icon: '🌧️',
-      label: 'Rain today',
-      value: `${today.precipSum.toFixed(units === 'imperial' ? 2 : 1)} ${unitLabels[units].precip}`,
-    });
-    const mins = minutesBetween(today.sunrise, today.sunset);
-    stats.push({
-      icon: '🌅',
-      label: 'Tee times',
-      value: `${clockLabel(today.sunrise)} – ${clockLabel(today.sunset)}`,
-      note: `${Math.floor(mins / 60)} h ${mins % 60} min of daylight`,
-    });
-  }
   return (
     <Card title="Yardage book" kicker="conditions now">
       <View style={styles.grid}>

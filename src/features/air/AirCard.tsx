@@ -1,5 +1,6 @@
 import { StyleSheet, Text, View } from 'react-native';
 import { aqiBand, pollenBand, type Air } from '@/core/air/air';
+import { hourLabel } from '@/core/weather/localTime';
 import { Card } from '@/ui/Card';
 import { bandColor, color, font, radius, space } from '@/ui/tokens';
 
@@ -28,10 +29,27 @@ export function AirCard({ air }: { air: Air | null }) {
         <Pill label="PM10" value={air.pm10} />
         <Pill label="Ozone" value={air.ozone} />
       </View>
+      {air.peak ? (
+        <Text style={styles.peak}>
+          Heads up: AQI near {Math.round(air.peak.aqi)} ({aqiBand(air.peak.aqi).label.toLowerCase()}
+          ) around {hourLabel(air.peak.time)}.
+        </Text>
+      ) : null}
+      <PollenReport pollen={air.pollen} />
+    </Card>
+  );
+}
+
+/** Pollen only exists in Europe in the free model; elsewhere the section is left out. */
+function PollenReport({ pollen }: { pollen: Air['pollen'] }) {
+  if (!pollen.length) return null;
+  const active = pollen.filter((p) => pollenBand(p.value).level > 0);
+  return (
+    <>
       <Text style={styles.sub}>The rough report · pollen</Text>
-      {air.pollen.length ? (
+      {active.length ? (
         <View style={{ gap: space.xs }}>
-          {air.pollen.map((p) => {
+          {active.map((p) => {
             const b = pollenBand(p.value);
             return (
               <View key={p.key} style={styles.pollen}>
@@ -44,11 +62,9 @@ export function AirCard({ air }: { air: Air | null }) {
           })}
         </View>
       ) : (
-        <Text style={styles.muted}>
-          Pollen isn’t tracked for this course. The free model only covers Europe.
-        </Text>
+        <Text style={styles.muted}>The rough is quiet. No pollen to speak of.</Text>
       )}
-    </Card>
+    </>
   );
 }
 
@@ -100,5 +116,6 @@ const styles = StyleSheet.create({
   pollenName: { fontFamily: font.bold, fontSize: 14, color: color.ink, width: 80 },
   pollenBand: { fontFamily: font.body, fontSize: 14, color: color.inkSoft, flex: 1 },
   pollenVal: { fontFamily: font.body, fontSize: 12, color: color.pencil },
+  peak: { fontFamily: font.bold, fontSize: 14, color: color.flag, marginTop: space.md },
   muted: { fontFamily: font.body, fontSize: 14, color: color.inkSoft },
 });

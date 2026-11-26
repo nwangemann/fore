@@ -1,3 +1,4 @@
+import { useSyncExternalStore } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
@@ -38,3 +39,11 @@ export const useSettings = create<Settings>()(
     { name: 'fore.settings', version: 1, storage: createJSONStorage(() => AsyncStorage) },
   ),
 );
+
+/** True once saved settings have loaded, so the dashboard never fetches the default place first. */
+export function useSettingsHydrated(): boolean {
+  return useSyncExternalStore(
+    (onChange) => useSettings.persist.onFinishHydration(onChange),
+    () => useSettings.persist.hasHydrated(),
+  );
+}

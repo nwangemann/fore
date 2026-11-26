@@ -1,3 +1,4 @@
+import type { Normal } from '../climate/normals';
 import type { Units } from '../units';
 import { condition } from './codes';
 import type { Day } from './forecast';
@@ -9,35 +10,70 @@ export type DayScore = {
   label: string;
 };
 
-const toC = (t: number, units: Units) => (units === 'imperial' ? ((t - 32) * 5) / 9 : t);
-const toKmh = (s: number, units: Units) => (units === 'imperial' ? s * 1.609 : s);
+export const toC = (t: number, units: Units) => (units === 'imperial' ? ((t - 32) * 5) / 9 : t);
+export const toKmh = (s: number, units: Units) => (units === 'imperial' ? s * 1.609 : s);
+export const toMm = (p: number, units: Units) => (units === 'imperial' ? p * 25.4 : p);
+/** A temperature difference in °C, expressed in the display unit. */
+export const deltaFromC = (d: number, units: Units) => (units === 'imperial' ? (d * 9) / 5 : d);
 
 /**
- * Scores a day for being outside: warm, dry, calm and bright is under par.
- * The thresholds are taste, not science; tune them in one place here.
+ * Scores a day for being outside. With a `normal`, par is what's usual for this place
+ * and date, so a mild winter day can be under par. Without one, a fixed ideal is used.
+ * The thresholds are taste, not science; tune them here.
  */
-export function scoreDay(day: Day, units: Units): DayScore {
+export function scoreDay(day: Day, units: Units, normal?: Normal | null): DayScore {
   const mood = condition(day.code).mood;
   if (mood === 'storm') return { strokes: null, label: 'Weather delay' };
+  const strokes = normal ? relative(day, units, normal) : absolute(day, units);
+  return { strokes, label: scoreLabel(strokes) };
+}
 
+function relative(day: Day, units: Units, normal: Normal): number {
+  const high = toC(day.high, units);
+  const mood = condition(day.code).mood;
+  let s = 0;
+
+  const warmth = high - normal.high;
+  if (warmth >= 6) s -= 2;
+  else if (warmth >= 3) s -= 1;
+  else if (warmth <= -6) s += 2;
+  else if (warmth <= -3) s += 1;
+
+  const wet = day.precipChance >= 50 && toMm(day.precipSum, units) >= 1;
+  const usuallyWet = normal.wetChance >= 50;
+  if (wet) s += usuallyWet ? 1 : 2;
+  else if (day.precipChance < 30 && usuallyWet) s -= 1;
+
+  const extraWind = toKmh(day.windMax, units) - normal.windMax;
+  if (extraWind >= 25) s += 2;
+  else if (extraWind >= 12) s += 1;
+
+  if (mood === 'snow') s += 1;
+  if (mood === 'clear' && s <= 0) s -= 1;
+  // Normal for the season can still be miserable: never under par below 5 °C or above 35 °C.
+  if (high < 5 || high > 35) s = Math.max(s, 0);
+  return s;
+}
+
+function absolute(day: Day, units: Units): number {
+  const mood = condition(day.code).mood;
   const high = toC(day.high, units);
   const wind = toKmh(day.windMax, units);
-  let strokes = 0;
+  let s = 0;
 
-  if (high >= 18 && high <= 26) strokes -= 1;
-  else if (high < 4 || high > 35) strokes += 2;
-  else if (high < 10 || high > 31) strokes += 1;
+  if (high >= 18 && high <= 26) s -= 1;
+  else if (high < 4 || high > 35) s += 2;
+  else if (high < 10 || high > 31) s += 1;
 
-  if (day.precipChance >= 60) strokes += 2;
-  else if (day.precipChance >= 30) strokes += 1;
+  if (day.precipChance >= 60) s += 2;
+  else if (day.precipChance >= 30) s += 1;
 
-  if (wind > 40) strokes += 2;
-  else if (wind > 25) strokes += 1;
+  if (wind > 40) s += 2;
+  else if (wind > 25) s += 1;
 
-  if (mood === 'snow') strokes += 2;
-  if (mood === 'clear' && strokes <= 0) strokes -= 1;
-
-  return { strokes, label: scoreLabel(strokes) };
+  if (mood === 'snow') s += 2;
+  if (mood === 'clear' && s <= 0) s -= 1;
+  return s;
 }
 
 export function scoreLabel(strokes: number): string {
@@ -56,16 +92,20 @@ export function scoreMark(score: DayScore): string {
   return score.strokes > 0 ? `+${score.strokes}` : `${score.strokes}`;
 }
 
+/** Index of the lowest-scoring day; the earliest wins a tie. Null if every day is delayed. */
+export function bestDay(scores: DayScore[]): number | null {
+  let best: number | null = null;
+  scores.forEach((s, i) => {
+    if (s.strokes === null) return;
+    const b = best === null ? null : scores[best]?.strokes;
+    if (b === null || b === undefined || s.strokes < b) best = i;
+  });
+  return best;
+}
+
 /** Plain-language hints for the hero card. */
 export function caddieNotes(
-  current: {
-    windSpeed: number;
-    windGusts: number;
-    uvIndex: number;
-    feelsLike: number;
-    temperature: number;
-  },
-  today: Day | undefined,
+  current: { windGusts: number; uvIndex: number; feelsLike: number; temperature: number },
   units: Units,
 ): string[] {
   const notes: string[] = [];
@@ -76,6 +116,5 @@ export function caddieNotes(
   const gap = toC(current.feelsLike, units) - toC(current.temperature, units);
   if (gap <= -4) notes.push('Wind chill bites. Layer up.');
   if (gap >= 4) notes.push('Muggy. Hydrate between holes.');
-  if (today && today.precipChance >= 50) notes.push('Rain likely today. Waterproofs in the bag.');
   return notes;
 }

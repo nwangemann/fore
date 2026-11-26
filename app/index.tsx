@@ -17,24 +17,33 @@ import { FrontNine } from '@/features/forecast/FrontNine';
 import { NowCard } from '@/features/forecast/NowCard';
 import { Scorecard } from '@/features/forecast/Scorecard';
 import { YardageBook } from '@/features/forecast/YardageBook';
-import { currentPlace } from '@/services/location';
-import { useSettings } from '@/state/settings';
+import { distanceKm } from '@/core/place/place';
+import { currentCoords, placeAt } from '@/services/location';
+import { useSettings, useSettingsHydrated } from '@/state/settings';
 import { Card } from '@/ui/Card';
 import { color, font, space, WIDE } from '@/ui/tokens';
 
+const FOLLOW_KM = 2;
+
 export default function Dashboard() {
   const { place, units, followMe, setPlace } = useSettings();
-  const d = useDashboard(place, units);
+  const hydrated = useSettingsHydrated();
+  const d = useDashboard(place, units, hydrated);
   const { width } = useWindowDimensions();
   const insets = useSafeAreaInsets();
   const wide = width >= WIDE;
 
   useEffect(() => {
-    if (!followMe) return;
-    currentPlace()
-      .then(setPlace)
+    if (!hydrated || !followMe) return;
+    // Only switch, and only spend a reverse-geocode call, when you've actually moved.
+    currentCoords()
+      .then((here) => {
+        const saved = useSettings.getState().place;
+        if (distanceKm(saved, { ...saved, ...here }) < FOLLOW_KM) return;
+        return placeAt(here).then(setPlace);
+      })
       .catch(() => {});
-  }, [followMe, setPlace]);
+  }, [hydrated, followMe, setPlace]);
 
   return (
     <ScrollView
@@ -47,8 +56,14 @@ export default function Dashboard() {
         />
       }
     >
-      <Header place={place} loading={d.loading} updatedAt={d.updatedAt} onRefresh={d.refresh} />
-      <AlertBanner alerts={d.alerts} />
+      <Header
+        place={place}
+        loading={d.loading}
+        updatedAt={d.updatedAt}
+        fromCache={d.fromCache}
+        onRefresh={d.refresh}
+      />
+      <AlertBanner alerts={d.alerts} failed={d.alertsFailed} />
       {d.error && !d.forecast ? (
         <Card title="Out of bounds">
           <Text style={styles.error}>
@@ -59,9 +74,13 @@ export default function Dashboard() {
       {d.forecast ? (
         <View style={[styles.grid, wide && styles.gridWide]}>
           <View style={[styles.col, wide && { flex: 1.15 }]}>
-            <NowCard forecast={d.forecast} units={units} />
+            <NowCard
+              forecast={d.forecast}
+              units={units}
+              normal={d.normals[d.forecast.days[0]?.date ?? ''] ?? null}
+            />
             <FrontNine hours={d.forecast.hours} />
-            <Scorecard days={d.forecast.days} units={units} />
+            <Scorecard days={d.forecast.days} units={units} normals={d.normals} />
           </View>
           <View style={[styles.col, wide && { flex: 1 }]}>
             <YardageBook forecast={d.forecast} units={units} />
