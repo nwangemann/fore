@@ -2,7 +2,7 @@ import { StyleSheet, Text, View } from 'react-native';
 import { aqiBand, pollenBand, type Air } from '@/core/air/air';
 import { hourLabel } from '@/core/weather/localTime';
 import { Card } from '@/ui/Card';
-import { bandColor, color, font, radius, space } from '@/ui/tokens';
+import { bandColor, bandText, color, font, radius, space } from '@/ui/tokens';
 
 export function AirCard({ air }: { air: Air | null }) {
   if (!air || air.usAqi === null) {
@@ -16,8 +16,12 @@ export function AirCard({ air }: { air: Air | null }) {
   return (
     <Card title="Clubhouse air" kicker="US AQI">
       <View style={styles.top}>
-        <View style={[styles.dial, { backgroundColor: bandColor[band.level] }]}>
-          <Text style={styles.aqi}>{Math.round(air.usAqi)}</Text>
+        <View
+          style={[styles.dial, { backgroundColor: bandColor[band.level] }]}
+          role="img"
+          aria-label={`AQI ${Math.round(air.usAqi)}`}
+        >
+          <Text style={[styles.aqi, { color: bandText[band.level] }]}>{Math.round(air.usAqi)}</Text>
         </View>
         <View style={{ flex: 1 }}>
           <Text style={styles.band}>{band.label}</Text>
@@ -53,7 +57,7 @@ function PollenReport({ pollen }: { pollen: Air['pollen'] }) {
             const b = pollenBand(p.value);
             return (
               <View key={p.key} style={styles.pollen}>
-                <View style={[styles.dot, { backgroundColor: bandColor[b.level] }]} />
+                <View style={[styles.dot, { backgroundColor: bandColor[b.level] }]} aria-hidden />
                 <Text style={styles.pollenName}>{p.name}</Text>
                 <Text style={styles.pollenBand}>{b.label}</Text>
                 <Text style={styles.pollenVal}>{Math.round(p.value)} /m³</Text>

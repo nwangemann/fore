@@ -1,7 +1,8 @@
 import { StyleSheet, Text, View } from 'react-native';
 import type { Units } from '@/core/units';
 import type { Day } from '@/core/weather/forecast';
-import { weekdayLabel } from '@/core/weather/localTime';
+import { weekdayLabel, weekdayName } from '@/core/weather/localTime';
+import { scorecardDayLabel } from '@/core/weather/speech';
 import type { Normal } from '@/core/climate/normals';
 import { bestDay, deltaFromC, scoreDay, scoreMark, type DayScore } from '@/core/weather/score';
 import { Card } from '@/ui/Card';
@@ -29,36 +30,63 @@ export function Scorecard({ days, units, normals }: Props) {
         <Text style={styles.empty}>No daily forecast for this course.</Text>
       </Card>
     );
+  const rows: RowName[] = hasPar
+    ? ['Hole', 'Sky', 'Par', 'High', 'Low', 'Rain', 'Score']
+    : ['Hole', 'Sky', 'High', 'Low', 'Rain', 'Score'];
+  const last = rows[rows.length - 1];
   return (
     <Card title="Scorecard" kicker="7-day fore-cast">
+      {/* Drawn as columns, one per day, so each day reads as one sentence. */}
       <View style={styles.table}>
-        <Row label="Hole">
-          {week.map((d, i) => cell(i, i === 0 ? 'Today' : weekdayLabel(d.date), styles.head))}
-        </Row>
-        <Row label="Sky">
-          {week.map((d, i) => (
-            <View key={i} style={styles.cell}>
-              <WeatherIcon code={d.code} isDay size={34} />
-            </View>
+        <View style={styles.labels} aria-hidden>
+          {rows.map((r) => (
+            <Cell key={r} row={r} last={r === last} label>
+              <Text style={styles.label}>{r}</Text>
+            </Cell>
           ))}
-        </Row>
-        {hasPar ? (
-          <Row label="Par">
-            {par.map((n, i) => cell(i, n ? deg(toUnit(n.high)) : '–', styles.par))}
-          </Row>
-        ) : null}
-        <Row label="High">{week.map((d, i) => cell(i, deg(d.high), styles.big))}</Row>
-        <Row label="Low">{week.map((d, i) => cell(i, deg(d.low), styles.soft))}</Row>
-        <Row label="Rain">
-          {week.map((d, i) => cell(i, `${Math.round(d.precipChance)}%`, styles.soft))}
-        </Row>
-        <Row label="Score" last>
-          {scores.map((s, i) => (
-            <View key={i} style={styles.cell}>
-              <Mark score={s} />
+        </View>
+        {week.map((d, i) => {
+          const s = scores[i]!;
+          const n = par[i];
+          return (
+            <View
+              key={d.date}
+              style={styles.col}
+              role="img"
+              aria-label={scorecardDayLabel({
+                name: i === 0 ? 'Today' : weekdayName(d.date),
+                high: d.high,
+                low: d.low,
+                precipChance: d.precipChance,
+                score: s,
+              })}
+            >
+              <Cell row="Hole">
+                <Text style={styles.head}>{i === 0 ? 'Today' : weekdayLabel(d.date)}</Text>
+              </Cell>
+              <Cell row="Sky">
+                <WeatherIcon code={d.code} isDay size={34} decorative />
+              </Cell>
+              {hasPar ? (
+                <Cell row="Par">
+                  <Text style={styles.par}>{n ? deg(toUnit(n.high)) : '–'}</Text>
+                </Cell>
+              ) : null}
+              <Cell row="High">
+                <Text style={styles.big}>{deg(d.high)}</Text>
+              </Cell>
+              <Cell row="Low">
+                <Text style={styles.soft}>{deg(d.low)}</Text>
+              </Cell>
+              <Cell row="Rain">
+                <Text style={styles.soft}>{`${Math.round(d.precipChance)}%`}</Text>
+              </Cell>
+              <Cell row="Score" last>
+                <Mark score={s} />
+              </Cell>
             </View>
-          ))}
-        </Row>
+          );
+        })}
       </View>
       {bestDate ? (
         <Text style={styles.total}>
@@ -74,28 +102,38 @@ export function Scorecard({ days, units, normals }: Props) {
   );
 }
 
-function cell(key: number, text: string, style: object) {
-  return (
-    <View key={key} style={styles.cell}>
-      <Text style={style}>{text}</Text>
-    </View>
-  );
-}
+type RowName = 'Hole' | 'Sky' | 'Par' | 'High' | 'Low' | 'Rain' | 'Score';
 
-function Row({
+/** Fixed row heights keep the day columns and the label column lined up. */
+const ROW_HEIGHT: Record<RowName, number> = {
+  Hole: 32,
+  Sky: 50,
+  Par: 34,
+  High: 38,
+  Low: 34,
+  Rain: 34,
+  Score: 50,
+};
+
+function Cell({
+  row,
+  last,
   label,
   children,
-  last,
 }: {
-  label: string;
-  children: React.ReactNode;
+  row: RowName;
   last?: boolean;
+  label?: boolean;
+  children: React.ReactNode;
 }) {
   return (
-    <View style={[styles.row, last && { borderBottomWidth: 0 }]}>
-      <View style={styles.labelCell}>
-        <Text style={styles.label}>{label}</Text>
-      </View>
+    <View
+      style={[
+        label ? styles.labelCell : styles.cell,
+        { height: ROW_HEIGHT[row] },
+        last && { borderBottomWidth: 0 },
+      ]}
+    >
       {children}
     </View>
   );
@@ -106,7 +144,7 @@ function Mark({ score }: { score: DayScore }) {
   const shape = s === null ? null : s < 0 ? styles.circle : s > 0 ? styles.box : null;
   const tint = s === null ? color.pencil : s < 0 ? color.under : s > 0 ? color.over : color.ink;
   return (
-    <View style={[styles.mark, shape, { borderColor: tint }]} accessibilityLabel={score.label}>
+    <View style={[styles.mark, shape, { borderColor: tint }]}>
       <Text style={[styles.markText, { color: tint }]}>{scoreMark(score)}</Text>
     </View>
   );
@@ -114,23 +152,27 @@ function Mark({ score }: { score: DayScore }) {
 
 const styles = StyleSheet.create({
   empty: { fontFamily: font.body, fontSize: 14, color: color.inkSoft },
-  table: { borderWidth: 1.5, borderColor: color.fairway, borderRadius: 6, overflow: 'hidden' },
-  row: { flexDirection: 'row', borderBottomWidth: 1, borderColor: color.paperEdge },
+  table: {
+    flexDirection: 'row',
+    borderWidth: 1.5,
+    borderColor: color.fairway,
+    borderRadius: 6,
+    overflow: 'hidden',
+  },
+  labels: { width: 58, backgroundColor: color.fairway },
   labelCell: {
-    width: 58,
-    backgroundColor: color.fairway,
     justifyContent: 'center',
     paddingHorizontal: space.sm,
+    borderBottomWidth: 1,
+    borderColor: color.paperEdge,
   },
+  col: { flex: 1, minWidth: 36, borderLeftWidth: 1, borderColor: color.paperEdge },
   label: { fontFamily: font.bold, fontSize: 11, color: color.paper, textTransform: 'uppercase' },
   cell: {
-    flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    paddingVertical: space.sm,
-    borderLeftWidth: 1,
+    borderBottomWidth: 1,
     borderColor: color.paperEdge,
-    minWidth: 36,
   },
   head: { fontFamily: font.bold, fontSize: 12, color: color.ink },
   big: { fontFamily: font.bold, fontSize: 16, color: color.ink },

@@ -14,6 +14,7 @@ import {
 } from '@/core/weather/outlook';
 import { caddieNotes, scoreDay } from '@/core/weather/score';
 import { deg } from '@/ui/format';
+import { headingLevel } from '@/ui/a11y';
 import { Icon } from '@/ui/icons/Icon';
 import { color, font, moodColor, radius, space } from '@/ui/tokens';
 import { WeatherIcon } from '@/ui/weather/WeatherIcon';
@@ -39,16 +40,18 @@ export function NowCard({ forecast, units, normal }: Props) {
   return (
     <View style={[styles.card, { backgroundColor: moodColor[sky.mood] }]}>
       <View style={styles.top}>
-        <WeatherIcon code={current.code} isDay={current.isDay} size={88} />
+        <WeatherIcon code={current.code} isDay={current.isDay} size={88} decorative />
         <View style={{ flex: 1 }}>
           <Text style={styles.temp}>
             {deg(current.temperature)}
             <Text style={styles.unit}>{unitLabels[units].temp.slice(1)}</Text>
           </Text>
-          <Text style={styles.label}>{sky.label}</Text>
+          <Text style={styles.label} role="heading" {...headingLevel(2)}>
+            {sky.label}
+          </Text>
         </View>
         {score ? (
-          <View style={styles.badge} accessibilityLabel={`Today scores ${score.label}`}>
+          <View style={styles.badge} role="img" aria-label={`Today scores ${score.label}`}>
             <Text style={styles.badgeKicker}>Today</Text>
             <Text style={styles.badgeText}>{score.label}</Text>
           </View>
@@ -78,7 +81,9 @@ export function NowCard({ forecast, units, normal }: Props) {
         <View style={styles.row}>
           {bag.length ? (
             <View style={styles.panel}>
-              <Text style={styles.panelHead}>In the bag</Text>
+              <Text style={styles.panelHead} role="heading" {...headingLevel(3)}>
+                In the bag
+              </Text>
               <View style={styles.chips}>
                 {bag.map((b) => (
                   <Text key={b.label} style={styles.chip}>
@@ -90,7 +95,9 @@ export function NowCard({ forecast, units, normal }: Props) {
           ) : null}
           {tee ? (
             <View style={styles.panel}>
-              <Text style={styles.panelHead}>Best tee time {tee.when}</Text>
+              <Text style={styles.panelHead} role="heading" {...headingLevel(3)}>
+                Best tee time {tee.when}
+              </Text>
               <Text style={styles.tee}>{tee.label}</Text>
               {tee.soggy ? <Text style={styles.small}>Least wet, not dry.</Text> : null}
             </View>
@@ -100,10 +107,13 @@ export function NowCard({ forecast, units, normal }: Props) {
 
       {notes.length ? (
         <View style={styles.notes}>
-          <Text style={styles.notesHead}>Caddie says</Text>
+          <Text style={styles.notesHead} role="heading" {...headingLevel(3)}>
+            Caddie says
+          </Text>
           {notes.map((n) => (
             <Text key={n} style={styles.note}>
-              • {n}
+              <Text aria-hidden>• </Text>
+              {n}
             </Text>
           ))}
         </View>
@@ -142,7 +152,8 @@ function Fact({ label, value }: { label: string; value: string }) {
   );
 }
 
-const glass = 'rgba(255,255,255,0.14)';
+// A darker tint, not a lighter one: sand and paper text stay at WCAG AA on every sky.
+const glass = 'rgba(0,0,0,0.12)';
 const shade = 'rgba(0,0,0,0.18)';
 
 const styles = StyleSheet.create({

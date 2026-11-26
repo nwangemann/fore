@@ -9,7 +9,7 @@ export function OutOfBounds({ message, onRetry, retryLabel = 'Re-tee' }: Props) 
   return (
     <Card title="Out of bounds" kicker="take a drop">
       <Text style={styles.message}>{message}</Text>
-      <Pressable onPress={onRetry} style={styles.button} accessibilityRole="button">
+      <Pressable onPress={onRetry} style={styles.button} role="button">
         <Text style={styles.label}>{retryLabel}</Text>
       </Pressable>
     </Card>

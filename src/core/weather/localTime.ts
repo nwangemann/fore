@@ -4,6 +4,15 @@
  */
 
 const weekdays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'] as const;
+const weekdayNames = [
+  'Sunday',
+  'Monday',
+  'Tuesday',
+  'Wednesday',
+  'Thursday',
+  'Friday',
+  'Saturday',
+] as const;
 
 /** "2026-11-25T20:30" → "2026-11-25T20:00" */
 export function hourKey(localTime: string): string {
@@ -27,9 +36,17 @@ export function clockLabel(localTime: string): string {
 
 /** "2026-11-25" → "Wed" */
 export function weekdayLabel(localDate: string): string {
+  return weekdays[weekdayIndex(localDate)] ?? '';
+}
+
+/** "2026-11-25" → "Wednesday", for screen readers. */
+export function weekdayName(localDate: string): string {
+  return weekdayNames[weekdayIndex(localDate)] ?? '';
+}
+
+function weekdayIndex(localDate: string): number {
   const [y, m, d] = localDate.split('-').map(Number);
-  const day = new Date(Date.UTC(y ?? 1970, (m ?? 1) - 1, d ?? 1)).getUTCDay();
-  return weekdays[day] ?? '';
+  return new Date(Date.UTC(y ?? 1970, (m ?? 1) - 1, d ?? 1)).getUTCDay();
 }
 
 /** Minutes between two local times on any dates, e.g. sunrise to sunset. */

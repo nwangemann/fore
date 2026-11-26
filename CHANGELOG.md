@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Accessibility: one spoken sentence per hour and per scorecard day, roles and names on every control, heading levels, a visible keyboard focus ring on web, and theme colours raised to WCAG AA contrast.
 - Par is now the seasonal normal (10-year archive), with a Par row and "best day to play" in place of the week total.
 - Hero card: rain timing outlook, 15-minute nowcast, vs yesterday and vs normal, in the bag, best tee time, sun strip.
 - Last forecast cached for an instant open; settings load before the first fetch; Follow me only switches after a real move.

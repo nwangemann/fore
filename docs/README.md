@@ -15,6 +15,6 @@
 - [Architecture](architecture.md)
 - [Data sources and what else is out there](data-sources.md)
 - [Dependencies](dependencies.md)
-- [Standards](standards.md)
+- [Standards](standards.md) (including accessibility)
 - [Decisions](adr/)
 - [Changelog](../CHANGELOG.md)

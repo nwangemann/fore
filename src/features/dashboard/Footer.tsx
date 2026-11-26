@@ -12,7 +12,7 @@ export function Footer() {
       <Text style={styles.text}>Weather data by </Text>
       {sources.map((s, i) => (
         <Text key={s.url} style={styles.text}>
-          <Text style={styles.link} onPress={() => void Linking.openURL(s.url)}>
+          <Text style={styles.link} role="link" onPress={() => void Linking.openURL(s.url)}>
             {s.label}
           </Text>
           {i < sources.length - 1 ? ' · ' : ''}

@@ -18,8 +18,8 @@ export function AlertBanner({ alerts, failed }: { alerts: Alert[]; failed: boole
           key={a.id || a.headline}
           onPress={() => setOpen(open === a.id ? null : a.id)}
           style={styles.card}
-          accessibilityRole="button"
-          accessibilityState={{ expanded: open === a.id }}
+          role="button"
+          aria-expanded={open === a.id}
         >
           <Text style={styles.shout}>FORE! {a.event}</Text>
           <Text style={styles.headline}>{a.headline}</Text>
@@ -31,7 +31,7 @@ export function AlertBanner({ alerts, failed }: { alerts: Alert[]; failed: boole
               ) : null}
             </>
           ) : (
-            <Text style={styles.more}>Tap for the details</Text>
+            <Text style={styles.more}>Show the details</Text>
           )}
         </Pressable>
       ))}
@@ -52,5 +52,5 @@ const styles = StyleSheet.create({
     fontSize: 13,
     marginBottom: space.lg,
   },
-  more: { fontFamily: font.body, color: color.paper, opacity: 0.8, fontSize: 12 },
+  more: { fontFamily: font.body, color: color.paper, fontSize: 12 },
 });

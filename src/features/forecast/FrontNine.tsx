@@ -1,7 +1,9 @@
 import { Fragment } from 'react';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import type { Hour } from '@/core/weather/forecast';
+import { condition } from '@/core/weather/codes';
 import { hourLabel } from '@/core/weather/localTime';
+import { hourCellLabel } from '@/core/weather/speech';
 import { Card } from '@/ui/Card';
 import { deg } from '@/ui/format';
 import { Icon } from '@/ui/icons/Icon';
@@ -17,18 +19,29 @@ export function FrontNine({ hours }: { hours: Hour[] }) {
       <ScrollView
         horizontal
         showsHorizontalScrollIndicator={false}
+        role="group"
+        aria-label="Hour by hour, scrolls sideways"
         contentContainerStyle={styles.row}
       >
         {round.map((h, i) => (
           <Fragment key={h.time}>
             {i === 9 ? (
-              <View style={styles.turn}>
+              <View style={styles.turn} aria-hidden>
                 <Text style={styles.turnText}>THE TURN</Text>
               </View>
             ) : null}
-            <View style={[styles.hole, i === 0 && styles.now]}>
+            <View
+              style={[styles.hole, i === 0 && styles.now]}
+              role="img"
+              aria-label={hourCellLabel({
+                time: i === 0 ? 'Now' : hourLabel(h.time),
+                sky: condition(h.code).label,
+                temperature: h.temperature,
+                precipChance: h.precipChance,
+              })}
+            >
               <Text style={styles.time}>{i === 0 ? 'Now' : hourLabel(h.time)}</Text>
-              <WeatherIcon code={h.code} isDay={h.isDay} size={40} />
+              <WeatherIcon code={h.code} isDay={h.isDay} size={40} decorative />
               <Text style={styles.temp}>{deg(h.temperature)}</Text>
               <View style={styles.rainRow}>
                 {h.precipChance > 0 ? <Icon name="raindrop" size={18} style={styles.drop} /> : null}

@@ -6,20 +6,25 @@ import { meteocons } from './meteocons';
 // Fails to compile if codes.ts names an icon that is not vendored.
 const icons: Record<WeatherIconName, string> = meteocons;
 
-type Props = { code: number; isDay: boolean; size: number };
+type Props = {
+  code: number;
+  isDay: boolean;
+  size: number;
+  /** Hide from screen readers when the surrounding label already names the sky. */
+  decorative?: boolean;
+};
 
 /**
  * The Meteocons icon for a WMO code. The box is fixed at `size`, so the
- * layout does not move while the SVG draws.
+ * layout does not move while the SVG draws. On its own it is an image named after
+ * the sky ("Light rain").
  */
-export function WeatherIcon({ code, isDay, size }: Props) {
+export function WeatherIcon({ code, isDay, size, decorative }: Props) {
+  const a11y = decorative
+    ? { 'aria-hidden': true }
+    : { role: 'img' as const, 'aria-label': condition(code).label };
   return (
-    <View
-      style={{ width: size, height: size }}
-      accessible
-      accessibilityRole="image"
-      accessibilityLabel={condition(code).label}
-    >
+    <View style={{ width: size, height: size }} {...a11y}>
       <SvgXml xml={icons[iconFor(code, isDay)]} width={size} height={size} />
     </View>
   );

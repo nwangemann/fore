@@ -14,6 +14,7 @@ import type { Units } from '@/core/units';
 import { currentPlace, LocationDenied } from '@/services/location';
 import { searchPlaces } from '@/services/openMeteo';
 import { useSettings } from '@/state/settings';
+import { pressedState } from '@/ui/a11y';
 import { Card } from '@/ui/Card';
 import { Icon } from '@/ui/icons/Icon';
 import { color, font, radius, space } from '@/ui/tokens';
@@ -91,7 +92,13 @@ export function CoursePicker() {
         {text.trim().length >= 2 && !searching && !results.length ? (
           <Text style={styles.muted}>Lost ball. No places match “{text.trim()}”.</Text>
         ) : null}
-        <Pressable onPress={locate} style={styles.locate} accessibilityRole="button">
+        <Pressable
+          onPress={locate}
+          style={styles.locate}
+          role="button"
+          aria-label="Use my location"
+          aria-busy={locating}
+        >
           {locating ? (
             <ActivityIndicator color={color.paper} />
           ) : (
@@ -112,13 +119,23 @@ export function CoursePicker() {
       <Card title="Clubhouse rules">
         <View style={styles.setting}>
           <Text style={[styles.settingLabel, { flex: 1 }]}>Units</Text>
-          <View style={styles.segment}>
+          <View style={styles.segment} role="group" aria-label="Units">
             {(['imperial', 'metric'] as Units[]).map((u) => (
               <Pressable
                 key={u}
                 onPress={() => setUnits(u)}
-                style={[styles.segBtn, units === u && styles.segOn]}
-                accessibilityState={{ selected: units === u }}
+                style={[
+                  styles.segBtn,
+                  u === 'imperial' ? styles.segFirst : styles.segLast,
+                  units === u && styles.segOn,
+                ]}
+                role="button"
+                {...pressedState(units === u)}
+                aria-label={
+                  u === 'imperial'
+                    ? 'Fahrenheit and miles per hour'
+                    : 'Celsius and kilometres per hour'
+                }
               >
                 <Text style={[styles.segText, units === u && styles.segTextOn]}>
                   {u === 'imperial' ? '°F · mph' : '°C · km/h'}
@@ -134,7 +151,12 @@ export function CoursePicker() {
 
 function Row({ place, onPress }: { place: Place; onPress: () => void }) {
   return (
-    <Pressable onPress={onPress} style={styles.row} accessibilityRole="button">
+    <Pressable
+      onPress={onPress}
+      style={styles.row}
+      role="button"
+      aria-label={place.detail ? `${place.name}, ${place.detail}` : place.name}
+    >
       <Icon name="flag" size={32} style={styles.rowFlag} />
       <View style={{ flex: 1 }}>
         <Text style={styles.rowName}>{place.name}</Text>
@@ -186,7 +208,6 @@ const styles = StyleSheet.create({
     borderRadius: radius.sm,
     borderWidth: 1,
     borderColor: color.fairway,
-    overflow: 'hidden',
   },
   segBtn: {
     paddingVertical: space.sm,
@@ -194,6 +215,9 @@ const styles = StyleSheet.create({
     minHeight: 40,
     justifyContent: 'center',
   },
+  // Rounded ends instead of overflow: hidden on the group, which would clip the focus ring.
+  segFirst: { borderTopLeftRadius: radius.sm - 1, borderBottomLeftRadius: radius.sm - 1 },
+  segLast: { borderTopRightRadius: radius.sm - 1, borderBottomRightRadius: radius.sm - 1 },
   segOn: { backgroundColor: color.fairway },
   segText: { fontFamily: font.medium, color: color.fairway },
   segTextOn: { color: color.paper },

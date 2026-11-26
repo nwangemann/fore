@@ -2,12 +2,12 @@
 
 ```
 app/            screens: index (dashboard), course (place picker modal), _layout
-src/core/       pure TypeScript: parsing, weather codes, scoring, AQI bands, local time
+src/core/       pure TypeScript: parsing, weather codes, scoring, AQI bands, local time, screen-reader sentences
 src/services/   network and device: Open-Meteo, NWS, expo-location
 src/state/      zustand store persisted with AsyncStorage (localStorage on web)
 public/         index.html, web manifest and icons
 src/features/   UI per area: dashboard, forecast, air, alerts, course
-src/ui/         tokens, Card, OutOfBounds, background stripes, formatters, WeatherIcon and Icon (vendored Meteocons)
+src/ui/         tokens, Card, OutOfBounds, background stripes, formatters, accessibility helpers, WeatherIcon and Icon (vendored Meteocons)
 ```
 
 ## Data flow
@@ -39,7 +39,7 @@ Errors and empty states (none renders blank):
 - Weather icons: `codes.ts` maps each WMO code to an icon name for day and night; `src/ui/weather/WeatherIcon.tsx` draws it from the vendored Meteocons SVGs in a fixed square box (ADR 9). Used in the hero, the round and the scorecard (the scorecard always uses the day icon). UI icons (the header and course-list flag, yardage book labels, sun strip, the round's rain chance) come from `src/ui/icons/uiIcons.ts` through `Icon`. In the bag and the alert banner are words only.
 - NowCard: current conditions and quip (`codes.ts`); vs yesterday and vs normal; a rain-timing outlook and a 15-minute nowcast (`outlook.ts`); in the bag; best tee time (two daylight hours that end by sunset); caddie notes; sunrise and sunset strip.
 - The round: 18 hours from the current hour, with "the turn" after nine.
-- Scorecard: 7 days with a Par row. `scoreDay` scores each day against the seasonal normal from `climate/normals.ts` once it has loaded, and against a fixed ideal until then. It never goes under par below 5 °C or above 35 °C. Thunderstorms are a weather delay. "Best day to play" is the lowest score, earliest on a tie.
+- Scorecard: 7 days with a Par row, drawn as one column per day so each day is read as one sentence (ADR 10). `scoreDay` scores each day against the seasonal normal from `climate/normals.ts` once it has loaded, and against a fixed ideal until then. It never goes under par below 5 °C or above 35 °C. Thunderstorms are a weather delay. "Best day to play" is the lowest score, earliest on a tie.
 - Yardage book: wind, humidity, UV, cloud, visibility, and pressure (inHg in imperial) with its 3-hour trend.
 
 Scoring and outlook thresholds are taste; tune them only in `score.ts` and `outlook.ts`.

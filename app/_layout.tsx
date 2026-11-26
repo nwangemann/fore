@@ -12,6 +12,7 @@ import { useFonts } from 'expo-font';
 import { DefaultTheme, type ErrorBoundaryProps, Stack, ThemeProvider } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { AppState, Platform, ScrollView, View } from 'react-native';
+import { installFocusRing } from '@/ui/a11y';
 import { OutOfBounds } from '@/ui/OutOfBounds';
 import { Stripes } from '@/ui/Stripes';
 import { color, font, space } from '@/ui/tokens';
@@ -40,6 +41,8 @@ const persistOptions = {
 void AsyncStorage.getAllKeys()
   .then((keys) => AsyncStorage.multiRemove(keys.filter((k) => k.startsWith('fore.cache.'))))
   .catch(() => undefined);
+
+installFocusRing();
 
 // Web refetches on tab focus by itself; native needs the app's foreground state.
 if (Platform.OS !== 'web') {

@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react';
 import { StyleSheet, Text, View, type ViewStyle } from 'react-native';
+import { headingLevel } from './a11y';
 import { color, font, radius, space } from './tokens';
 
 type Props = { title?: string; kicker?: string; children: ReactNode; style?: ViewStyle };
@@ -10,7 +11,9 @@ export function Card({ title, kicker, children, style }: Props) {
     <View style={[styles.card, style]}>
       {title ? (
         <View style={styles.head}>
-          <Text style={styles.title}>{title}</Text>
+          <Text style={styles.title} role="heading" {...headingLevel(2)}>
+            {title}
+          </Text>
           {kicker ? <Text style={styles.kicker}>{kicker}</Text> : null}
         </View>
       ) : null}

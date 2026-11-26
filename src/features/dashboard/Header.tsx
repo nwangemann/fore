@@ -1,6 +1,7 @@
 import { Link } from 'expo-router';
 import { ActivityIndicator, Pressable, StyleSheet, Text, View } from 'react-native';
 import type { Place } from '@/core/place/place';
+import { headingLevel } from '@/ui/a11y';
 import { Icon } from '@/ui/icons/Icon';
 import { color, font, radius, space } from '@/ui/tokens';
 
@@ -18,14 +19,18 @@ export function Header({ place, loading, updatedAt, fromCache, problem, onRefres
   return (
     <View style={styles.wrap}>
       <View style={styles.brand}>
-        <Text style={styles.logo} accessibilityRole="header">
+        <Text style={styles.logo} role="heading" {...headingLevel(1)}>
           fore!
         </Text>
         <Text style={styles.tag}>your daily fore-cast</Text>
       </View>
       <View style={styles.row}>
         <Link href="/course" asChild>
-          <Pressable style={styles.pill} accessibilityLabel={`Change course, now ${place.name}`}>
+          <Pressable
+            style={styles.pill}
+            role="link"
+            aria-label={`Change course, now playing ${place.name}`}
+          >
             <Icon name="flag" size={36} style={styles.flag} />
             <View style={{ flexShrink: 1 }}>
               <Text style={styles.place} numberOfLines={1}>
@@ -40,7 +45,13 @@ export function Header({ place, loading, updatedAt, fromCache, problem, onRefres
             <Text style={styles.change}>Change course</Text>
           </Pressable>
         </Link>
-        <Pressable onPress={onRefresh} style={styles.retee} accessibilityLabel="Refresh forecast">
+        <Pressable
+          onPress={onRefresh}
+          style={styles.retee}
+          role="button"
+          aria-label="Re-tee: refresh the forecast"
+          aria-busy={loading}
+        >
           {loading ? (
             <ActivityIndicator color={color.ink} />
           ) : (
@@ -49,7 +60,7 @@ export function Header({ place, loading, updatedAt, fromCache, problem, onRefres
         </Pressable>
       </View>
       {updatedAt ? (
-        <Text style={styles.updated}>
+        <Text style={styles.updated} aria-live="polite">
           {fromCache ? 'From your last visit, signed ' : 'Card signed '}
           {signedLabel(updatedAt)}
           {fromCache ? ' · updating…' : ''}
