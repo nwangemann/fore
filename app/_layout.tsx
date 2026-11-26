@@ -12,6 +12,7 @@ import { useFonts } from 'expo-font';
 import { DefaultTheme, type ErrorBoundaryProps, Stack, ThemeProvider } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { AppState, Platform, ScrollView, View } from 'react-native';
+import { useCourseVariant } from '@/features/dashboard/useDashboard';
 import { installFocusRing } from '@/ui/a11y';
 import { OutOfBounds } from '@/ui/OutOfBounds';
 import { Stripes } from '@/ui/Stripes';
@@ -62,7 +63,7 @@ export default function RootLayout() {
   return (
     <PersistQueryClientProvider client={queryClient} persistOptions={persistOptions}>
       <View style={{ flex: 1, backgroundColor: color.fairway }}>
-        <Stripes />
+        <CourseStripes />
         <StatusBar style="light" />
         {loaded ? (
           <ThemeProvider value={theme}>
@@ -85,6 +86,11 @@ export default function RootLayout() {
       </View>
     </PersistQueryClientProvider>
   );
+}
+
+/** The stripes in the home course's current variant; inside the provider so it can query. */
+function CourseStripes() {
+  return <Stripes variant={useCourseVariant()} />;
 }
 
 /**

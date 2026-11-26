@@ -13,10 +13,11 @@ import {
   versusYesterday,
 } from '@/core/weather/outlook';
 import { caddieNotes, scoreDay } from '@/core/weather/score';
+import { courseVariant } from '@/core/weather/variant';
 import { deg } from '@/ui/format';
 import { headingLevel } from '@/ui/a11y';
 import { Icon } from '@/ui/icons/Icon';
-import { color, font, moodColor, radius, space } from '@/ui/tokens';
+import { color, font, heroColor, radius, space } from '@/ui/tokens';
 import { WeatherIcon } from '@/ui/weather/WeatherIcon';
 
 type Props = { forecast: Forecast; units: Units; normal: Normal | null };
@@ -25,6 +26,7 @@ export function NowCard({ forecast, units, normal }: Props) {
   const { current, hours } = forecast;
   const today = forecast.days[0];
   const sky = condition(current.code);
+  const variant = courseVariant(current.code, current.isDay);
   const notes = caddieNotes(current, units);
   const score = today ? scoreDay(today, units, normal) : null;
   const nowcast = nowcastLine(forecast.nowcast, sky.mood === 'snow');
@@ -38,7 +40,7 @@ export function NowCard({ forecast, units, normal }: Props) {
   const precip = unitLabels[units].precip;
 
   return (
-    <View style={[styles.card, { backgroundColor: moodColor[sky.mood] }]}>
+    <View style={[styles.card, { backgroundColor: heroColor(variant, sky.mood) }]}>
       <View style={styles.top}>
         <WeatherIcon code={current.code} isDay={current.isDay} size={88} decorative />
         <View style={{ flex: 1 }}>

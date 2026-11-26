@@ -5,8 +5,10 @@ import { archiveRange, normalFor, type Normal } from '@/core/climate/normals';
 import type { Place } from '@/core/place/place';
 import type { Units } from '@/core/units';
 import type { Forecast } from '@/core/weather/forecast';
+import { courseVariant, type CourseVariant } from '@/core/weather/variant';
 import { fetchAlerts } from '@/services/nws';
 import { fetchAir, fetchArchive, fetchForecast } from '@/services/openMeteo';
+import { useSettings, useSettingsHydrated } from '@/state/settings';
 
 export type Dashboard = {
   forecast: Forecast | null;
@@ -33,18 +35,37 @@ const live = { staleTime: STALE_MS, refetchInterval: STALE_MS };
 /** Data updated before this load came from the persisted cache. */
 const LOADED_AT = Date.now();
 
+const placeKey = (place: Place) => `${place.latitude.toFixed(3)},${place.longitude.toFixed(3)}`;
+
+/** The forecast query, shared by the dashboard and the course variant. */
+function forecastQuery(place: Place, units: Units, enabled: boolean) {
+  return {
+    queryKey: ['forecast', placeKey(place), units],
+    queryFn: () => fetchForecast(place, units),
+    enabled,
+    ...live,
+  };
+}
+
+/**
+ * The course variant for the home course's current sky, for the stripes in the root
+ * layout. It shares the dashboard's forecast query, so it adds no request; `day` until
+ * the forecast loads.
+ */
+export function useCourseVariant(): CourseVariant {
+  const { place, units } = useSettings();
+  const hydrated = useSettingsHydrated();
+  const { data } = useQuery(forecastQuery(place, units, hydrated));
+  return data ? courseVariant(data.current.code, data.current.isDay) : 'day';
+}
+
 /**
  * Composes one query per source. Keys carry the place (and units for the forecast), so
  * switching place starts empty instead of showing the old place's data.
  */
 export function useDashboard(place: Place, units: Units, enabled = true): Dashboard {
-  const at = `${place.latitude.toFixed(3)},${place.longitude.toFixed(3)}`;
-  const f = useQuery({
-    queryKey: ['forecast', at, units],
-    queryFn: () => fetchForecast(place, units),
-    enabled,
-    ...live,
-  });
+  const at = placeKey(place);
+  const f = useQuery(forecastQuery(place, units, enabled));
   const a = useQuery({ queryKey: ['air', at], queryFn: () => fetchAir(place), enabled, ...live });
   const w = useQuery({
     queryKey: ['alerts', at],

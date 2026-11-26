@@ -1,4 +1,5 @@
 import type { Condition } from '@/core/weather/codes';
+import type { CourseVariant } from '@/core/weather/variant';
 
 export const color = {
   fairway: '#1E5B3A',
@@ -27,6 +28,23 @@ export const moodColor: Record<Condition['mood'], string> = {
   snow: '#475F6F',
   storm: '#3D2F4D',
 };
+
+/**
+ * Mowing stripes per course variant (`courseVariant` in `src/core`). Paper and sand text
+ * sit on the stripes at WCAG AA (4.5:1) in every variant; ADR 11 lists the ratios.
+ */
+export const stripeColor: Record<CourseVariant, { fairway: string; stripe: string }> = {
+  day: { fairway: color.fairway, stripe: color.stripe },
+  night: { fairway: '#132A33', stripe: '#17323C' },
+  frost: { fairway: '#375957', stripe: '#3D6260' },
+  storm: { fairway: '#1F2B2C', stripe: '#263436' },
+};
+
+/** Hero card colour: by sky in the day, by variant at night, in frost and in storms. */
+export function heroColor(variant: CourseVariant, mood: Condition['mood']): string {
+  if (variant === 'day') return moodColor[mood];
+  return { night: '#24365A', frost: '#3F5A70', storm: moodColor.storm }[variant];
+}
 
 export const space = { xs: 4, sm: 8, md: 12, lg: 16, xl: 24, xxl: 32 } as const;
 export const radius = { sm: 8, md: 14, lg: 22 } as const;
