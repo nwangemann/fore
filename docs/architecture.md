@@ -55,3 +55,12 @@ Scoring and outlook thresholds are taste; tune them only in `score.ts` and `outl
 ### Course
 
 `src/features/course/CoursePicker.tsx`, shown at `/course`. Debounced place search, "Use my location" (saved as "Current location" with its coordinates), recent places, and units. Picking a place saves it as the home course and returns to the dashboard.
+
+## Testing
+
+Two layers so far, both run by `npm test` (Jest, `jest-expo` preset):
+
+- Core: unit tests next to the logic in `src/core` where mistakes are easy to miss (scoring, outlook, parsing, AQI, speech).
+- Services: `src/services/*.test.ts` mock `fetch` with trimmed real responses from `src/services/__fixtures__/` (Open-Meteo forecast, air, archive and geocoding; NWS alerts), and check the request and every field the parsers read. A change in an API's shape fails a test. The fixtures' README says when and where they were recorded and how to re-record them.
+
+`location.ts` wraps `expo-location` and has no test; it is covered by the manual checks.
