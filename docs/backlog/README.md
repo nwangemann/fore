@@ -1,6 +1,6 @@
 # Backlog
 
-**Next step: 9.1 Person-only checks** ([manual.md](manual.md)). Needs a person; no agent steps remain on the roadmap.
+**Next step: 9.1 Person-only checks** ([manual.md](manual.md)). Needs a person; no agent steps remain on the roadmap. The phase is complete and tagged `v1.0.0` (2026-11-26), before the manual checks.
 
 ## State
 

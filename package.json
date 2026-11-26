@@ -1,6 +1,6 @@
 {
   "name": "fore",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "A golf-themed weather dashboard built with Expo, web first. Free, keyless data from Open-Meteo and the US National Weather Service.",
   "repository": {
     "type": "git",
