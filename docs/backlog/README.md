@@ -1,12 +1,12 @@
 # Backlog
 
-**Next step: 4.2 Remaining emoji** ([icons.md](icons.md)).
+**Next step: 5.1 Errors and empty states** ([quality.md](quality.md)).
 
 ## State
 
 Snapshot: 2026-11-25. The dashboard works in the web preview against live APIs.
 
-- Verified: `npm run check`; at desktop and 375 px widths for Portland, OR, every dashboard section, search and saved place, NWS alert banners and European pollen. Since 3.1 and 3.2 (TanStack Query), data loads, Re-tee refetches, switching place never shows the old place's data, a reload paints the last visit's forecast at once ("From your last visit · updating…") and the archive is fetched once per place. Since 4.1, weather conditions draw as Meteocons SVG icons in the hero, the round and the scorecard, at both widths with no layout shift.
+- Verified: `npm run check`; at desktop and 375 px widths for Portland, OR, every dashboard section, search and saved place, NWS alert banners and European pollen. Since 3.1 and 3.2 (TanStack Query), data loads, Re-tee refetches, switching place never shows the old place's data, a reload paints the last visit's forecast at once ("From your last visit · updating…") and the archive is fetched once per place. Since 4.1, weather conditions draw as Meteocons SVG icons in the hero, the round and the scorecard, at both widths with no layout shift. Since 4.2, no emoji remain: Meteocons UI icons label the yardage book, the sun strip and the round's rain chance, a drawn flagstick marks the header and course rows, and the bag is words only.
 - Not verified: "Use my location" with the prompt allowed (needs a person); the nowcast line and AQI peak warning in real weather (unit-tested only); the iOS build, native location and AsyncStorage on native.
 
 ## Roadmap
@@ -18,7 +18,7 @@ Each section is a file of session-sized steps. Do one step per session, in order
 | 1   | [Trim scope and docs](trim.md)                   | 3/3   |
 | 2   | [Publish on GitHub](publish.md)                  | 1/1   |
 | 3   | [TanStack Query data layer](tanstack-query.md)   | 2/2   |
-| 4   | [SVG weather icons](icons.md)                    | 1/2   |
+| 4   | [SVG weather icons](icons.md)                    | 2/2   |
 | 5   | [Resilience and accessibility](quality.md)       | 0/2   |
 | 6   | [Tests at every layer](tests.md)                 | 0/3   |
 | 7   | [Course follows the weather](weather-theme.md)   | 0/2   |

@@ -3,6 +3,8 @@ import { compassPoint, unitLabels, visibilityToDistance, type Units } from '@/co
 import type { Forecast } from '@/core/weather/forecast';
 import { Card } from '@/ui/Card';
 import { deg, pct, speed } from '@/ui/format';
+import { Icon } from '@/ui/icons/Icon';
+import type { UiIconName } from '@/ui/icons/uiIcons';
 import { color, font, radius, space } from '@/ui/tokens';
 
 const trendNote = {
@@ -11,7 +13,7 @@ const trendNote = {
   steady: '→ steady',
 } as const;
 
-type Stat = { label: string; value: string; note?: string; icon: string };
+type Stat = { label: string; value: string; note?: string; icon: UiIconName };
 
 /** The conditions a golfer reads before every shot. */
 export function YardageBook({ forecast, units }: { forecast: Forecast; units: Units }) {
@@ -20,26 +22,31 @@ export function YardageBook({ forecast, units }: { forecast: Forecast; units: Un
   const vis = visibilityToDistance(c.visibility, units);
   const stats: Stat[] = [
     {
-      icon: '🚩',
+      icon: 'windsock',
       label: 'Wind',
       value: speed(c.windSpeed, units),
       note: `from the ${compassPoint(c.windDirection)}, gusts ${speed(c.windGusts, units)}`,
     },
-    { icon: '💦', label: 'Humidity', value: pct(c.humidity), note: `dew point ${deg(c.dewPoint)}` },
     {
-      icon: '😎',
+      icon: 'humidity',
+      label: 'Humidity',
+      value: pct(c.humidity),
+      note: `dew point ${deg(c.dewPoint)}`,
+    },
+    {
+      icon: 'uv-index',
       label: 'UV index',
       value: String(Math.round(c.uvIndex)),
       note: today ? `peak ${Math.round(today.uvMax)} today` : undefined,
     },
-    { icon: '☁️', label: 'Cloud cover', value: pct(c.cloudCover) },
+    { icon: 'cloudy', label: 'Cloud cover', value: pct(c.cloudCover) },
     {
-      icon: '🔭',
+      icon: 'horizon',
       label: 'Visibility',
       value: `${vis >= 10 ? Math.round(vis) : vis.toFixed(1)} ${unitLabels[units].distance}`,
     },
     {
-      icon: '🎈',
+      icon: 'barometer',
       label: 'Pressure',
       value:
         units === 'imperial'
@@ -53,9 +60,10 @@ export function YardageBook({ forecast, units }: { forecast: Forecast; units: Un
       <View style={styles.grid}>
         {stats.map((s) => (
           <View key={s.label} style={styles.stat}>
-            <Text style={styles.label}>
-              {s.icon} {s.label}
-            </Text>
+            <View style={styles.labelRow}>
+              <Icon name={s.icon} size={28} style={styles.icon} />
+              <Text style={styles.label}>{s.label}</Text>
+            </View>
             <Text style={styles.value}>{s.value}</Text>
             {s.note ? <Text style={styles.note}>{s.note}</Text> : null}
           </View>
@@ -75,6 +83,8 @@ const styles = StyleSheet.create({
     padding: space.md,
     gap: 2,
   },
+  labelRow: { flexDirection: 'row', alignItems: 'center', gap: 2 },
+  icon: { marginVertical: -6, marginLeft: -6 },
   label: {
     fontFamily: font.medium,
     fontSize: 12,

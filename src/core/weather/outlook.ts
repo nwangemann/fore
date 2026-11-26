@@ -85,7 +85,7 @@ export function nowcastLine(slots: Slot[], snowing = false): string | null {
   return start === -1 ? null : `${word} starting in about ${start * 15} min.`;
 }
 
-export type BagItem = { icon: string; label: string };
+export type BagItem = { label: string };
 
 /** What to take out the door for the next 12 hours. */
 export function inTheBag(hours: Hour[], today: Day | undefined, units: Units): BagItem[] {
@@ -93,12 +93,11 @@ export function inTheBag(hours: Hour[], today: Day | undefined, units: Units): B
   if (!next.length) return [];
   const coldest = Math.min(...next.map((h) => toC(h.feelsLike, units)));
   const items: BagItem[] = [];
-  if (coldest < 0) items.push({ icon: '🧤', label: 'Winter coat' });
-  else if (coldest < 10) items.push({ icon: '🧥', label: 'Warm layer' });
-  else if (coldest < 16) items.push({ icon: '🧥', label: 'Light jacket' });
-  if (next.some((h) => isWet(h, units))) items.push({ icon: '☂️', label: 'Umbrella' });
-  if (today && today.uvMax >= 5 && next.some((h) => h.isDay))
-    items.push({ icon: '🧴', label: 'Sunscreen' });
+  if (coldest < 0) items.push({ label: 'Winter coat' });
+  else if (coldest < 10) items.push({ label: 'Warm layer' });
+  else if (coldest < 16) items.push({ label: 'Light jacket' });
+  if (next.some((h) => isWet(h, units))) items.push({ label: 'Umbrella' });
+  if (today && today.uvMax >= 5 && next.some((h) => h.isDay)) items.push({ label: 'Sunscreen' });
   return items;
 }
 

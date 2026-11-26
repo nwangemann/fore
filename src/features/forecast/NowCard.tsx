@@ -14,6 +14,7 @@ import {
 } from '@/core/weather/outlook';
 import { caddieNotes, scoreDay } from '@/core/weather/score';
 import { deg } from '@/ui/format';
+import { Icon } from '@/ui/icons/Icon';
 import { color, font, moodColor, radius, space } from '@/ui/tokens';
 import { WeatherIcon } from '@/ui/weather/WeatherIcon';
 
@@ -57,7 +58,7 @@ export function NowCard({ forecast, units, normal }: Props) {
       {context.length ? <Text style={styles.context}>{context.join(' · ')}</Text> : null}
 
       <View style={styles.outlook}>
-        {nowcast ? <Text style={styles.nowcast}>⏱ {nowcast}</Text> : null}
+        {nowcast ? <Text style={styles.nowcast}>{nowcast}</Text> : null}
         <Text style={styles.outlookText}>{outlook}</Text>
       </View>
 
@@ -81,7 +82,7 @@ export function NowCard({ forecast, units, normal }: Props) {
               <View style={styles.chips}>
                 {bag.map((b) => (
                   <Text key={b.label} style={styles.chip}>
-                    {b.icon} {b.label}
+                    {b.label}
                   </Text>
                 ))}
               </View>
@@ -117,8 +118,14 @@ function SunStrip({ sunrise, sunset }: { sunrise: string; sunset: string }) {
   const mins = minutesBetween(sunrise, sunset);
   return (
     <View style={styles.sun}>
-      <Text style={styles.sunText}>🌅 First tee {clockLabel(sunrise)}</Text>
-      <Text style={styles.sunText}>🌇 Last light {clockLabel(sunset)}</Text>
+      <View style={styles.sunItem}>
+        <Icon name="sunrise" size={32} style={styles.sunIcon} />
+        <Text style={styles.sunText}>First tee {clockLabel(sunrise)}</Text>
+      </View>
+      <View style={styles.sunItem}>
+        <Icon name="sunset" size={32} style={styles.sunIcon} />
+        <Text style={styles.sunText}>Last light {clockLabel(sunset)}</Text>
+      </View>
       <Text style={styles.sunText}>
         {Math.floor(mins / 60)} h {mins % 60} m of daylight
       </Text>
@@ -217,6 +224,9 @@ const styles = StyleSheet.create({
     borderTopWidth: 1,
     borderColor: 'rgba(255,255,255,0.2)',
     paddingTop: space.md,
+    alignItems: 'center',
   },
+  sunItem: { flexDirection: 'row', alignItems: 'center', gap: 2 },
+  sunIcon: { marginVertical: -8, marginLeft: -6 },
   sunText: { fontFamily: font.medium, fontSize: 13, color: color.paper },
 });

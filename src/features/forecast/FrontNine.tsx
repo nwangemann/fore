@@ -4,6 +4,7 @@ import type { Hour } from '@/core/weather/forecast';
 import { hourLabel } from '@/core/weather/localTime';
 import { Card } from '@/ui/Card';
 import { deg } from '@/ui/format';
+import { Icon } from '@/ui/icons/Icon';
 import { color, font, radius, space } from '@/ui/tokens';
 import { WeatherIcon } from '@/ui/weather/WeatherIcon';
 
@@ -28,9 +29,12 @@ export function FrontNine({ hours }: { hours: Hour[] }) {
               <Text style={styles.time}>{i === 0 ? 'Now' : hourLabel(h.time)}</Text>
               <WeatherIcon code={h.code} isDay={h.isDay} size={40} />
               <Text style={styles.temp}>{deg(h.temperature)}</Text>
-              <Text style={[styles.rain, h.precipChance >= 40 && styles.wet]}>
-                {h.precipChance > 0 ? `💧${Math.round(h.precipChance)}%` : ' '}
-              </Text>
+              <View style={styles.rainRow}>
+                {h.precipChance > 0 ? <Icon name="raindrop" size={18} style={styles.drop} /> : null}
+                <Text style={[styles.rain, h.precipChance >= 40 && styles.wet]}>
+                  {h.precipChance > 0 ? `${Math.round(h.precipChance)}%` : ' '}
+                </Text>
+              </View>
             </View>
           </Fragment>
         ))}
@@ -53,6 +57,8 @@ const styles = StyleSheet.create({
   now: { backgroundColor: color.sand, borderColor: color.sand },
   time: { fontFamily: font.medium, fontSize: 12, color: color.inkSoft },
   temp: { fontFamily: font.bold, fontSize: 18, color: color.ink },
+  rainRow: { flexDirection: 'row', alignItems: 'center', height: 16 },
+  drop: { marginHorizontal: -4 },
   rain: { fontFamily: font.body, fontSize: 11, color: color.inkSoft },
   wet: { color: color.over, fontFamily: font.bold },
   turn: {

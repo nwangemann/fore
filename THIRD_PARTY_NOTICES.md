@@ -4,7 +4,7 @@ npm packages and their licences are listed in [docs/dependencies.md](docs/depend
 
 ## Meteocons
 
-- What: 21 static weather icons ("fill" style), vendored as SVG strings in `src/ui/weather/meteocons.ts`.
+- What: 21 static weather icons ("fill" style), vendored as SVG strings in `src/ui/weather/meteocons.ts`, and 9 UI icons (barometer, cloudy, horizon, humidity, raindrop, sunrise, sunset, uv-index, windsock) in `src/ui/icons/uiIcons.ts`. The `flag` icon in that file is fore!'s own drawing in the Meteocons style, not part of Meteocons.
 - Source: https://github.com/basmilius/meteocons (formerly `basmilius/weather-icons`), tag `v2.0.0`, files `design/fill/export/wi_<name>.svg`.
 - Changes: gradient ids prefixed with the icon name, gradients that inherited stops through `xlink:href` given their stops directly, whitespace collapsed. The drawings are unchanged.
 - Licence: MIT

@@ -15,6 +15,7 @@ import { currentPlace, LocationDenied } from '@/services/location';
 import { searchPlaces } from '@/services/openMeteo';
 import { useSettings } from '@/state/settings';
 import { Card } from '@/ui/Card';
+import { Icon } from '@/ui/icons/Icon';
 import { color, font, radius, space } from '@/ui/tokens';
 
 /** Search for a course, use the device location, and pick units. */
@@ -94,7 +95,7 @@ export function CoursePicker() {
           {locating ? (
             <ActivityIndicator color={color.paper} />
           ) : (
-            <Text style={styles.locateText}>📍 Use my location</Text>
+            <Text style={styles.locateText}>Use my location</Text>
           )}
         </Pressable>
         {problem ? <Text style={styles.problem}>{problem}</Text> : null}
@@ -134,7 +135,7 @@ export function CoursePicker() {
 function Row({ place, onPress }: { place: Place; onPress: () => void }) {
   return (
     <Pressable onPress={onPress} style={styles.row} accessibilityRole="button">
-      <Text style={styles.rowFlag}>⛳</Text>
+      <Icon name="flag" size={32} style={styles.rowFlag} />
       <View style={{ flex: 1 }}>
         <Text style={styles.rowName}>{place.name}</Text>
         <Text style={styles.muted}>{place.detail}</Text>
@@ -164,7 +165,7 @@ const styles = StyleSheet.create({
     borderColor: color.paperEdge,
     minHeight: 44,
   },
-  rowFlag: { fontSize: 20 },
+  rowFlag: { marginHorizontal: -6 },
   rowName: { fontFamily: font.bold, fontSize: 16, color: color.ink },
   muted: { fontFamily: font.body, fontSize: 13, color: color.inkSoft, marginTop: 2 },
   locate: {

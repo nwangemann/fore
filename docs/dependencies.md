@@ -25,7 +25,7 @@
 | `react-native`                              | UI                                                   | MIT     | 0002 |
 | `react-native-safe-area-context`            | Notch insets                                         | MIT     | 0002 |
 | `react-native-screens`                      | Expo Router requirement                              | MIT     | 0002 |
-| `react-native-svg`                          | Draws the Meteocons weather icons                    | MIT     | 0009 |
+| `react-native-svg`                          | Draws the Meteocons weather and UI icons             | MIT     | 0009 |
 | `react-native-web`                          | Web target                                           | MIT     | 0002 |
 | `zustand`                                   | Settings store                                       | MIT     | 0003 |
 

@@ -1,6 +1,7 @@
 import { Link } from 'expo-router';
 import { ActivityIndicator, Pressable, StyleSheet, Text, View } from 'react-native';
 import type { Place } from '@/core/place/place';
+import { Icon } from '@/ui/icons/Icon';
 import { color, font, radius, space } from '@/ui/tokens';
 
 type Props = {
@@ -23,7 +24,7 @@ export function Header({ place, loading, updatedAt, fromCache, onRefresh }: Prop
       <View style={styles.row}>
         <Link href="/course" asChild>
           <Pressable style={styles.pill} accessibilityLabel={`Change course, now ${place.name}`}>
-            <Text style={styles.flag}>⛳</Text>
+            <Icon name="flag" size={36} style={styles.flag} />
             <View style={{ flexShrink: 1 }}>
               <Text style={styles.place} numberOfLines={1}>
                 {place.name}
@@ -88,7 +89,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: space.lg,
     minHeight: 52,
   },
-  flag: { fontSize: 24 },
+  flag: { marginHorizontal: -6 },
   place: { fontFamily: font.bold, fontSize: 18, color: color.ink },
   detail: { fontFamily: font.body, fontSize: 13, color: color.inkSoft },
   change: {
