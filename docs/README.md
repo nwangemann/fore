@@ -6,6 +6,7 @@
 2. `npm install`
 3. `npm run web` opens the dashboard at http://localhost:8081. `npm run ios` builds for the simulator (untested so far).
 4. `npm run check` before every commit.
+5. `npm run test:e2e` runs the end-to-end smoke test; the first time, run `npx playwright install --only-shell chromium`.
 
 ## Index
 

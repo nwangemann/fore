@@ -58,9 +58,10 @@ Scoring and outlook thresholds are taste; tune them only in `score.ts` and `outl
 
 ## Testing
 
-Two layers so far, both run by `npm test` (Jest, `jest-expo` preset):
+Three layers. The first two run in `npm test` (Jest, `jest-expo` preset) and so in `npm run check`:
 
 - Core: unit tests next to the logic in `src/core` where mistakes are easy to miss (scoring, outlook, parsing, AQI, speech).
 - Services: `src/services/*.test.ts` mock `fetch` with trimmed real responses from `src/services/__fixtures__/` (Open-Meteo forecast, air, archive and geocoding; NWS alerts), and check the request and every field the parsers read. A change in an API's shape fails a test. The fixtures' README says when and where they were recorded and how to re-record them.
+- End to end: `npm run test:e2e` (Playwright, Chromium headless shell) exports the web build (`npx expo export -p web`), serves `dist/` with `npx expo serve` on port 4183 and runs `e2e/smoke.spec.ts`. The test answers every API call with the same fixtures through `page.route`, pins the clock to when they were recorded, and fails on any request that leaves the local server, so it never touches the network. It checks the hero temperature, the nowcast and outlook lines, today's scorecard column, and the Change course search. It is kept out of Jest and out of `npm run check` because it is slower and needs the browser. One-time setup: `npx playwright install --only-shell chromium`.
 
 `location.ts` wraps `expo-location` and has no test; it is covered by the manual checks.

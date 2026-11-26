@@ -1,12 +1,12 @@
 # Backlog
 
-**Next step: 6.2 Playwright smoke test** ([tests.md](tests.md)).
+**Next step: 6.3 CI** ([tests.md](tests.md)).
 
 ## State
 
 Snapshot: 2026-11-25. The dashboard works in the web preview against live APIs.
 
-- Verified: `npm run check`; at desktop and 375 px widths for Portland, OR, every dashboard section, search and saved place, NWS alert banners and European pollen. Since 3.1 and 3.2 (TanStack Query), data loads, Re-tee refetches, switching place never shows the old place's data, a reload paints the last visit's forecast at once ("From your last visit · updating…") and the archive is fetched once per place. Since 4.1, weather conditions draw as Meteocons SVG icons in the hero, the round and the scorecard, at both widths with no layout shift. Since 4.2, no emoji remain: Meteocons UI icons label the yardage book, the sun strip and the round's rain chance, a drawn flagstick marks the header and course rows, and the bag is words only. Since 5.1, a forced render error shows the route-level "Out of bounds" card and "Play it again" recovers; a failed forecast with no cache, and offline with no cache, show an "Out of bounds" card whose Re-tee recovers; a failed refresh keeps the cached dashboard with "couldn't refresh" in the header. Since 5.2, a keyboard-only walk works: Tab reaches Change course, Re-tee, the round, the footer links, the search, its results, Use my location and the units, each with a visible two-tone focus ring; Enter and Space work on them. The accessibility tree reads one sentence per hour and per scorecard day, with headings in order; every theme text pair meets WCAG AA (ADR 10). Since 6.1, `npm test` also runs the services against recorded API fixtures, and deleting a field a parser reads fails a test.
+- Verified: `npm run check`; at desktop and 375 px widths for Portland, OR, every dashboard section, search and saved place, NWS alert banners and European pollen. Since 3.1 and 3.2 (TanStack Query), data loads, Re-tee refetches, switching place never shows the old place's data, a reload paints the last visit's forecast at once ("From your last visit · updating…") and the archive is fetched once per place. Since 4.1, weather conditions draw as Meteocons SVG icons in the hero, the round and the scorecard, at both widths with no layout shift. Since 4.2, no emoji remain: Meteocons UI icons label the yardage book, the sun strip and the round's rain chance, a drawn flagstick marks the header and course rows, and the bag is words only. Since 5.1, a forced render error shows the route-level "Out of bounds" card and "Play it again" recovers; a failed forecast with no cache, and offline with no cache, show an "Out of bounds" card whose Re-tee recovers; a failed refresh keeps the cached dashboard with "couldn't refresh" in the header. Since 5.2, a keyboard-only walk works: Tab reaches Change course, Re-tee, the round, the footer links, the search, its results, Use my location and the units, each with a visible two-tone focus ring; Enter and Space work on them. The accessibility tree reads one sentence per hour and per scorecard day, with headings in order; every theme text pair meets WCAG AA (ADR 10). Since 6.1, `npm test` also runs the services against recorded API fixtures, and deleting a field a parser reads fails a test. Since 6.2, `npm run test:e2e` runs the web export in headless Chromium against the same fixtures with every other request blocked (passes twice in a row; removing a fixture host fails it).
 - Not verified: "Use my location" with the prompt allowed (needs a person); a real screen reader (VoiceOver, needs a person); the nowcast line and AQI peak warning in real weather (unit-tested only); the iOS build, native location and AsyncStorage on native.
 
 ## Roadmap
@@ -20,7 +20,7 @@ Each section is a file of session-sized steps. Do one step per session, in order
 | 3   | [TanStack Query data layer](tanstack-query.md)   | 2/2   |
 | 4   | [SVG weather icons](icons.md)                    | 2/2   |
 | 5   | [Resilience and accessibility](quality.md)       | 2/2   |
-| 6   | [Tests at every layer](tests.md)                 | 1/3   |
+| 6   | [Tests at every layer](tests.md)                 | 2/3   |
 | 7   | [Course follows the weather](weather-theme.md)   | 0/2   |
 | 8   | [README and AI workflow](readme-and-workflow.md) | 0/2   |
 | 9   | [Manual checks](manual.md) (last)                | 0/1   |

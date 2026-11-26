@@ -1,6 +1,6 @@
 # Service fixtures
 
-Trimmed real API responses, used by the service tests (`src/services/*.test.ts`) to mock `fetch`, so a change in an API's shape fails a test.
+Trimmed real API responses, used by the service tests (`src/services/*.test.ts`) to mock `fetch`, so a change in an API's shape fails a test. The Playwright smoke test (`e2e/smoke.spec.ts`) serves the same files to the web build.
 
 Recorded 2026-11-26 (about 04:15 UTC) with the same endpoints and parameters the services send:
 

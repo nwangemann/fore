@@ -42,3 +42,7 @@ yarn-error.*
 
 # generated API reference
 docs/api/
+
+# Playwright
+test-results/
+playwright-report/

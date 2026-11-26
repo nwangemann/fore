@@ -37,6 +37,7 @@ Vendored assets (not npm packages) are listed with their licences in [THIRD_PART
 | --------------------------------- | --------------------- | ------- | ---- |
 | `@commitlint/cli`                 | Commit message check  | MIT     | 0001 |
 | `@commitlint/config-conventional` | Conventional Commits  | MIT     | 0001 |
+| `@playwright/test`                | End-to-end smoke test | Apache  | 0001 |
 | `@types/jest`                     | Test types            | MIT     | 0001 |
 | `@types/react`                    | React types           | MIT     | 0001 |
 | `eslint`                          | Lint (pinned to 9)    | MIT     | 0001 |
