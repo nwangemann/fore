@@ -1,12 +1,12 @@
 import { useQuery } from '@tanstack/react-query';
 import type { Air } from '@/core/air/air';
 import type { Alert } from '@/core/alerts/alerts';
-import type { Normal } from '@/core/climate/normals';
+import { archiveRange, normalFor, type Normal } from '@/core/climate/normals';
 import type { Place } from '@/core/place/place';
 import type { Units } from '@/core/units';
 import type { Forecast } from '@/core/weather/forecast';
 import { fetchAlerts } from '@/services/nws';
-import { fetchAir, fetchForecast, fetchNormals } from '@/services/openMeteo';
+import { fetchAir, fetchArchive, fetchForecast } from '@/services/openMeteo';
 
 export type Dashboard = {
   forecast: Forecast | null;
@@ -20,13 +20,16 @@ export type Dashboard = {
   error: string | null;
   loading: boolean;
   updatedAt: Date | null;
-  /** True while showing the cached copy from a previous visit (restored in step 3.2). */
+  /** True while the forecast shown is from a previous visit and a refresh is under way. */
   fromCache: boolean;
   refresh: () => void;
 };
 
+const DAY_MS = 24 * 60 * 60 * 1000;
 const STALE_MS = 10 * 60 * 1000;
 const live = { staleTime: STALE_MS, refetchInterval: STALE_MS };
+/** Data updated before this load came from the persisted cache. */
+const LOADED_AT = Date.now();
 
 /**
  * Composes one query per source. Keys carry the place (and units for the forecast), so
@@ -47,24 +50,30 @@ export function useDashboard(place: Place, units: Units, enabled = true): Dashbo
     enabled,
     ...live,
   });
-  const dates = f.data?.days.map((d) => d.date) ?? [];
+  const days = f.data?.days ?? [];
+  const range = days[0] ? archiveRange(days[0].date) : null;
   const n = useQuery({
-    queryKey: ['normals', at, dates[0]],
-    queryFn: () => fetchNormals(place, dates),
-    enabled: enabled && dates.length > 0,
+    queryKey: ['archive', at, range?.start],
+    queryFn: () => (range ? fetchArchive(place, range) : Promise.resolve([])),
+    enabled: enabled && range !== null,
     staleTime: Infinity,
+    gcTime: 30 * DAY_MS,
   });
+  const records = n.data;
+  const normals = records
+    ? Object.fromEntries(days.map((d) => [d.date, normalFor(records, d.date)]))
+    : {};
 
   return {
     forecast: f.data ?? null,
     air: a.data ?? null,
     alerts: w.data ?? [],
     alertsFailed: w.isError,
-    normals: n.data ?? {},
+    normals,
     error: f.error ? f.error.message || 'The forecast went out of bounds' : null,
     loading: f.isFetching || (f.isPending && !f.error),
     updatedAt: f.dataUpdatedAt ? new Date(f.dataUpdatedAt) : null,
-    fromCache: false,
+    fromCache: f.isFetching && f.dataUpdatedAt > 0 && f.dataUpdatedAt < LOADED_AT,
     refresh: () => void Promise.all([f.refetch(), a.refetch(), w.refetch()]),
   };
 }

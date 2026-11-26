@@ -1,12 +1,5 @@
 import { AIR_FIELDS, parseAir, type Air } from '@/core/air/air';
-import {
-  ARCHIVE_FIELDS,
-  archiveRange,
-  normalFor,
-  parseArchive,
-  type DailyRecord,
-  type Normal,
-} from '@/core/climate/normals';
+import { ARCHIVE_FIELDS, parseArchive, type DailyRecord } from '@/core/climate/normals';
 import type { Place } from '@/core/place/place';
 import type { Units } from '@/core/units';
 import {
@@ -17,7 +10,6 @@ import {
   parseForecast,
   type Forecast,
 } from '@/core/weather/forecast';
-import { readCache, writeCache } from './cache';
 import { getJson, query } from './http';
 
 /** Open-Meteo: free, keyless, non-commercial use. https://open-meteo.com */
@@ -59,38 +51,23 @@ export async function fetchAir(place: Place): Promise<Air> {
   return parseAir(await getJson(`${AIR}?${q}`));
 }
 
-type NormalsCache = { range: string; records: DailyRecord[] };
-
 /**
- * Seasonal normals for each date, from the last ten full years. The archive is fetched
- * once per place and year (about 3,650 days, metric) and kept in the cache.
+ * Daily records for the archive range (about 3,650 days, metric). The query cache keeps
+ * them per place and range, so this runs about once per place a year.
  */
-export async function fetchNormals(
+export async function fetchArchive(
   place: Place,
-  dates: string[],
-): Promise<Record<string, Normal | null>> {
-  const today = dates[0];
-  if (!today) return {};
-  const { start, end } = archiveRange(today);
-  const key = `normals.${place.latitude.toFixed(2)},${place.longitude.toFixed(2)}`;
-  let cached = await readCache<NormalsCache>(key);
-  if (!cached || cached.range !== `${start}/${end}`) {
-    const q = query({
-      latitude: place.latitude,
-      longitude: place.longitude,
-      start_date: start,
-      end_date: end,
-      daily: ARCHIVE_FIELDS.join(','),
-      timezone: 'auto',
-    });
-    cached = {
-      range: `${start}/${end}`,
-      records: parseArchive(await getJson(`${ARCHIVE}?${q}`, undefined, 20000)),
-    };
-    void writeCache(key, cached);
-  }
-  const records = cached.records;
-  return Object.fromEntries(dates.map((d) => [d, normalFor(records, d)]));
+  range: { start: string; end: string },
+): Promise<DailyRecord[]> {
+  const q = query({
+    latitude: place.latitude,
+    longitude: place.longitude,
+    start_date: range.start,
+    end_date: range.end,
+    daily: ARCHIVE_FIELDS.join(','),
+    timezone: 'auto',
+  });
+  return parseArchive(await getJson(`${ARCHIVE}?${q}`, undefined, 20000));
 }
 
 type GeoResult = {
