@@ -9,11 +9,12 @@ import { createAsyncStoragePersister } from '@tanstack/query-async-storage-persi
 import { focusManager, QueryClient } from '@tanstack/react-query';
 import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client';
 import { useFonts } from 'expo-font';
-import { DefaultTheme, Stack, ThemeProvider } from 'expo-router';
+import { DefaultTheme, type ErrorBoundaryProps, Stack, ThemeProvider } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
-import { AppState, Platform, View } from 'react-native';
+import { AppState, Platform, ScrollView, View } from 'react-native';
+import { OutOfBounds } from '@/ui/OutOfBounds';
 import { Stripes } from '@/ui/Stripes';
-import { color, font } from '@/ui/tokens';
+import { color, font, space } from '@/ui/tokens';
 
 const theme = {
   ...DefaultTheme,
@@ -80,5 +81,33 @@ export default function RootLayout() {
         ) : null}
       </View>
     </PersistQueryClientProvider>
+  );
+}
+
+/**
+ * Expo Router's route-level boundary: a render error anywhere below the root shows this
+ * card instead of a blank page. It replaces the layout, so it brings its own background.
+ */
+export function ErrorBoundary({ error, retry }: ErrorBoundaryProps) {
+  return (
+    <View style={{ flex: 1, backgroundColor: color.fairway }}>
+      <Stripes />
+      <StatusBar style="light" />
+      <ScrollView
+        contentContainerStyle={{
+          padding: space.lg,
+          paddingTop: space.xxl,
+          width: '100%',
+          maxWidth: 640,
+          alignSelf: 'center',
+        }}
+      >
+        <OutOfBounds
+          message={`Something on the course broke: ${error.message || 'an unknown error'}. Take a drop and play it again.`}
+          onRetry={() => void retry()}
+          retryLabel="Play it again"
+        />
+      </ScrollView>
+    </View>
   );
 }

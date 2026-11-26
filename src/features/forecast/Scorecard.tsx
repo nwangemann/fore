@@ -23,6 +23,12 @@ export function Scorecard({ days, units, normals }: Props) {
   const bestDate = best === null ? null : week[best];
   const toUnit = (c: number) => (units === 'imperial' ? deltaFromC(c, units) + 32 : c);
   const hasPar = par.some(Boolean);
+  if (!week.length)
+    return (
+      <Card title="Scorecard" kicker="7-day fore-cast">
+        <Text style={styles.empty}>No daily forecast for this course.</Text>
+      </Card>
+    );
   return (
     <Card title="Scorecard" kicker="7-day fore-cast">
       <View style={styles.table}>
@@ -107,6 +113,7 @@ function Mark({ score }: { score: DayScore }) {
 }
 
 const styles = StyleSheet.create({
+  empty: { fontFamily: font.body, fontSize: 14, color: color.inkSoft },
   table: { borderWidth: 1.5, borderColor: color.fairway, borderRadius: 6, overflow: 'hidden' },
   row: { flexDirection: 'row', borderBottomWidth: 1, borderColor: color.paperEdge },
   labelCell: {

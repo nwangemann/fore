@@ -13,6 +13,7 @@ export function FrontNine({ hours }: { hours: Hour[] }) {
   const round = hours.slice(0, 18);
   return (
     <Card title="The round" kicker="next 18 hours">
+      {round.length ? null : <Text style={styles.empty}>No hourly forecast for this course.</Text>}
       <ScrollView
         horizontal
         showsHorizontalScrollIndicator={false}
@@ -44,6 +45,7 @@ export function FrontNine({ hours }: { hours: Hour[] }) {
 }
 
 const styles = StyleSheet.create({
+  empty: { fontFamily: font.body, fontSize: 14, color: color.inkSoft },
   row: { gap: space.xs, paddingBottom: space.xs },
   hole: {
     width: 66,

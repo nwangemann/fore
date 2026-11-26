@@ -7,7 +7,7 @@ src/services/   network and device: Open-Meteo, NWS, expo-location
 src/state/      zustand store persisted with AsyncStorage (localStorage on web)
 public/         index.html, web manifest and icons
 src/features/   UI per area: dashboard, forecast, air, alerts, course
-src/ui/         tokens, Card, background stripes, formatters, WeatherIcon and Icon (vendored Meteocons)
+src/ui/         tokens, Card, OutOfBounds, background stripes, formatters, WeatherIcon and Icon (vendored Meteocons)
 ```
 
 ## Data flow
@@ -23,6 +23,14 @@ src/ui/         tokens, Card, background stripes, formatters, WeatherIcon and Ic
 `src/features/dashboard`: the page header (logo, place pill, Re-tee refresh, when the card was signed), footer credits, and `useDashboard`.
 
 `useDashboard` waits for saved settings to load. Every query key carries the place, so data for a previous place or unit system is never shown; a failed refresh keeps the last good forecast. The query cache is persisted to AsyncStorage (`fore.queries`), so a reload paints the last visit's data at once and the header says "From your last visit · updating…" until the refresh lands.
+
+Errors and empty states (none renders blank):
+
+- Render error anywhere: `app/_layout.tsx` exports Expo Router's `ErrorBoundary`, which replaces the app with an "Out of bounds" card (`src/ui/OutOfBounds.tsx`) and a "Play it again" button that calls `retry`.
+- Forecast loading with nothing cached: "Teeing up the forecast…".
+- Forecast failed with nothing cached: an "Out of bounds" card with the error and a Re-tee button. Offline with nothing cached (the query is paused): the same card, saying it loads once back online.
+- Forecast failed or offline with a cached copy: the cached dashboard stays, and the header adds "couldn't refresh, Re-tee to retry" or "offline" after when the card was signed.
+- No hours or days in a forecast: the round and the scorecard say so in their card. No air reading: the air card says so. Alerts that fail to load get a one-line note; air and the archive fail quietly.
 
 ### Forecast
 

@@ -17,7 +17,7 @@ import { NowCard } from '@/features/forecast/NowCard';
 import { Scorecard } from '@/features/forecast/Scorecard';
 import { YardageBook } from '@/features/forecast/YardageBook';
 import { useSettings, useSettingsHydrated } from '@/state/settings';
-import { Card } from '@/ui/Card';
+import { OutOfBounds } from '@/ui/OutOfBounds';
 import { color, font, space, WIDE } from '@/ui/tokens';
 
 export default function Dashboard() {
@@ -44,16 +44,10 @@ export default function Dashboard() {
         loading={d.loading}
         updatedAt={d.updatedAt}
         fromCache={d.fromCache}
+        problem={d.offline ? 'offline' : d.error ? 'failed' : null}
         onRefresh={d.refresh}
       />
       <AlertBanner alerts={d.alerts} failed={d.alertsFailed} />
-      {d.error && !d.forecast ? (
-        <Card title="Out of bounds">
-          <Text style={styles.error}>
-            Couldn’t load the forecast: {d.error}. Tap Re-tee to try again.
-          </Text>
-        </Card>
-      ) : null}
       {d.forecast ? (
         <View style={[styles.grid, wide && styles.gridWide]}>
           <View style={[styles.col, wide && { flex: 1.15 }]}>
@@ -70,9 +64,19 @@ export default function Dashboard() {
             <AirCard air={d.air} />
           </View>
         </View>
-      ) : !d.error ? (
+      ) : d.error ? (
+        <OutOfBounds
+          message={`Couldn’t load the forecast: ${d.error}. Give it another swing.`}
+          onRetry={d.refresh}
+        />
+      ) : d.offline ? (
+        <OutOfBounds
+          message="You’re offline and there is no saved card for this course yet. It loads as soon as you’re back on the network."
+          onRetry={d.refresh}
+        />
+      ) : (
         <Text style={styles.loading}>Teeing up the forecast…</Text>
-      ) : null}
+      )}
       <Footer />
     </ScrollView>
   );
@@ -96,5 +100,4 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginTop: 60,
   },
-  error: { fontFamily: font.body, color: color.ink, fontSize: 15 },
 });

@@ -9,10 +9,12 @@ type Props = {
   loading: boolean;
   updatedAt: Date | null;
   fromCache: boolean;
+  /** Why the card shown may be old: the refresh failed, or the device is offline. */
+  problem: 'failed' | 'offline' | null;
   onRefresh: () => void;
 };
 
-export function Header({ place, loading, updatedAt, fromCache, onRefresh }: Props) {
+export function Header({ place, loading, updatedAt, fromCache, problem, onRefresh }: Props) {
   return (
     <View style={styles.wrap}>
       <View style={styles.brand}>
@@ -51,11 +53,14 @@ export function Header({ place, loading, updatedAt, fromCache, onRefresh }: Prop
           {fromCache ? 'From your last visit, signed ' : 'Card signed '}
           {signedLabel(updatedAt)}
           {fromCache ? ' · updating…' : ''}
+          {problem && !loading ? ` · ${PROBLEM[problem]}` : ''}
         </Text>
       ) : null}
     </View>
   );
 }
+
+const PROBLEM = { failed: 'couldn’t refresh, Re-tee to retry', offline: 'offline' } as const;
 
 /** "7:57 PM" today, "Tue 7:57 PM" on another day. */
 function signedLabel(at: Date): string {

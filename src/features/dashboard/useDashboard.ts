@@ -19,6 +19,8 @@ export type Dashboard = {
   /** Forecast failure; the other sources fail quietly. */
   error: string | null;
   loading: boolean;
+  /** True while the forecast fetch is paused because the device is offline. */
+  offline: boolean;
   updatedAt: Date | null;
   /** True while the forecast shown is from a previous visit and a refresh is under way. */
   fromCache: boolean;
@@ -71,7 +73,8 @@ export function useDashboard(place: Place, units: Units, enabled = true): Dashbo
     alertsFailed: w.isError,
     normals,
     error: f.error ? f.error.message || 'The forecast went out of bounds' : null,
-    loading: f.isFetching || (f.isPending && !f.error),
+    loading: f.isFetching || (f.isPending && !f.error && f.fetchStatus !== 'paused'),
+    offline: f.fetchStatus === 'paused',
     updatedAt: f.dataUpdatedAt ? new Date(f.dataUpdatedAt) : null,
     fromCache: f.isFetching && f.dataUpdatedAt > 0 && f.dataUpdatedAt < LOADED_AT,
     refresh: () => void Promise.all([f.refetch(), a.refetch(), w.refetch()]),
