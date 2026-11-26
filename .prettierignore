@@ -1,0 +1,8 @@
+node_modules
+dist
+public
+.expo
+package-lock.json
+AGENTS.md
+.claude
+tsconfig.json

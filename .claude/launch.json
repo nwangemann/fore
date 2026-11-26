@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "fore-web",
+      "runtimeExecutable": "/bin/zsh",
+      "runtimeArgs": ["-c", "export PATH=$HOME/.local/node/bin:$PATH && npx expo start --web --port 8082"],
+      "port": 8082
+    }
+  ]
+}

@@ -1,0 +1,43 @@
+# Dependencies
+
+`npm run docs:check` fails if this table and package.json differ.
+
+## dependencies
+
+| Package                                     | Purpose                               | Licence | ADR  |
+| ------------------------------------------- | ------------------------------------- | ------- | ---- |
+| `@expo-google-fonts/shrikhand`              | Display font for headings and numbers | OFL     | 0004 |
+| `@expo-google-fonts/space-grotesk`          | Body font                             | OFL     | 0004 |
+| `@expo/metro-runtime`                       | Web bundling runtime                  | MIT     | 0002 |
+| `@react-native-async-storage/async-storage` | Saved settings (localStorage on web)  | MIT     | 0003 |
+| `expo`                                      | App framework                         | MIT     | 0002 |
+| `expo-constants`                            | Expo Router requirement               | MIT     | 0002 |
+| `expo-font`                                 | Loads the fonts                       | MIT     | 0004 |
+| `expo-linking`                              | Expo Router requirement               | MIT     | 0002 |
+| `expo-location`                             | "Use my location" on web and native   | MIT     | 0005 |
+| `expo-router`                               | Navigation                            | MIT     | 0002 |
+| `expo-status-bar`                           | Light status bar on native            | MIT     | 0002 |
+| `react`                                     | UI                                    | MIT     | 0002 |
+| `react-dom`                                 | Web renderer                          | MIT     | 0002 |
+| `react-native`                              | UI                                    | MIT     | 0002 |
+| `react-native-safe-area-context`            | Notch insets                          | MIT     | 0002 |
+| `react-native-screens`                      | Expo Router requirement               | MIT     | 0002 |
+| `react-native-web`                          | Web target                            | MIT     | 0002 |
+| `zustand`                                   | Settings store                        | MIT     | 0003 |
+
+## devDependencies
+
+| Package                           | Purpose               | Licence | ADR  |
+| --------------------------------- | --------------------- | ------- | ---- |
+| `@commitlint/cli`                 | Commit message check  | MIT     | 0001 |
+| `@commitlint/config-conventional` | Conventional Commits  | MIT     | 0001 |
+| `@types/jest`                     | Test types            | MIT     | 0001 |
+| `@types/react`                    | React types           | MIT     | 0001 |
+| `eslint`                          | Lint (pinned to 9)    | MIT     | 0001 |
+| `eslint-config-expo`              | Expo lint rules       | MIT     | 0001 |
+| `eslint-config-prettier`          | Lint/format agreement | MIT     | 0001 |
+| `husky`                           | Git hooks             | MIT     | 0001 |
+| `jest`                            | Tests                 | MIT     | 0001 |
+| `jest-expo`                       | Jest preset           | MIT     | 0001 |
+| `prettier`                        | Formatting            | MIT     | 0001 |
+| `typescript`                      | Types                 | Apache  | 0001 |
