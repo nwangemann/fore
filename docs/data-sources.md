@@ -11,7 +11,6 @@ All sources in use are free and keyless and were called live on 2026-11-25.
 | US AQI now and next 24 h, PM2.5, PM10, ozone, pollen   | Open-Meteo air-quality API (CAMS models)                     | As above                                                          |
 | Place search                                           | Open-Meteo geocoding API (GeoNames)                          | As above                                                          |
 | Active watches and warnings (US only)                  | US National Weather Service `api.weather.gov/alerts`         | Public domain, no key; sends CORS headers                         |
-| Name for "Use my location" coordinates                 | OpenStreetMap Nominatim `/reverse`                           | ODbL, at most 1 request a second, light use only                  |
 
 Coverage notes from the live calls:
 

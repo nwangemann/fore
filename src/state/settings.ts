@@ -9,13 +9,10 @@ type Settings = {
   /** The home course: what the dashboard shows on every open. */
   place: Place;
   units: Units;
-  /** When on, the dashboard re-reads the device location on each open. */
-  followMe: boolean;
   /** Recently picked places, newest first. */
   recent: Place[];
   setPlace: (place: Place) => void;
   setUnits: (units: Units) => void;
-  setFollowMe: (on: boolean) => void;
 };
 
 const same = (a: Place, b: Place) =>
@@ -26,7 +23,6 @@ export const useSettings = create<Settings>()(
     (set) => ({
       place: DEFAULT_PLACE,
       units: 'imperial',
-      followMe: false,
       recent: [],
       setPlace: (place) =>
         set((s) => ({
@@ -34,7 +30,6 @@ export const useSettings = create<Settings>()(
           recent: [place, ...s.recent.filter((p) => !same(p, place))].slice(0, 5),
         })),
       setUnits: (units) => set({ units }),
-      setFollowMe: (followMe) => set({ followMe }),
     }),
     { name: 'fore.settings', version: 1, storage: createJSONStorage(() => AsyncStorage) },
   ),

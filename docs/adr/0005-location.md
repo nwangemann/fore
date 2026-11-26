@@ -5,4 +5,4 @@
 
 ## Decision
 
-The dashboard always shows one saved place. The user can search (Open-Meteo geocoding) or tap "Use my location" (expo-location, which uses the browser's geolocation on web). Follow me re-reads the location every time the app opens. Coordinates are named with OpenStreetMap Nominatim, called only on those actions to stay within its usage policy. The default place before setup is St Andrews, the home of golf.
+The dashboard always shows one saved place. The user can search (Open-Meteo geocoding) or tap "Use my location" (expo-location, which uses the browser's geolocation on web). A device fix is saved as "Current location" with its coordinates as the detail; there is no reverse geocoding, so no third source or usage policy to respect. An earlier Follow me option, which re-read the location on every open and named it with OpenStreetMap Nominatim, was cut on 2026-11-25 to keep the scope small. The default place before setup is St Andrews, the home of golf.

@@ -9,10 +9,10 @@ A small, cheeky, personal weather dashboard. The fore-cast for one home course, 
 - Clubhouse air: US AQI and particulates, plus pollen where available (Europe).
 - FORE! banners for active US National Weather Service alerts.
 
-Pick a place once with **Change course** (search or "Use my location"); it is saved in the browser. Turn on **Follow me** to re-read your location every time the app opens.
+Pick a place once with **Change course** (search or "Use my location"); it is saved in the browser.
 
 ## Run
 
 See [docs/README.md](docs/README.md). Short version: `npm install`, then `npm run web`.
 
-Weather data by [Open-Meteo](https://open-meteo.com/) (CC BY 4.0), alerts by the [US National Weather Service](https://www.weather.gov/), place names © [OpenStreetMap contributors](https://www.openstreetmap.org/copyright).
+Weather data by [Open-Meteo](https://open-meteo.com/) (CC BY 4.0), alerts by the [US National Weather Service](https://www.weather.gov/).

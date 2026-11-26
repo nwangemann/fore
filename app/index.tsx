@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import {
   RefreshControl,
   ScrollView,
@@ -17,33 +16,17 @@ import { FrontNine } from '@/features/forecast/FrontNine';
 import { NowCard } from '@/features/forecast/NowCard';
 import { Scorecard } from '@/features/forecast/Scorecard';
 import { YardageBook } from '@/features/forecast/YardageBook';
-import { distanceKm } from '@/core/place/place';
-import { currentCoords, placeAt } from '@/services/location';
 import { useSettings, useSettingsHydrated } from '@/state/settings';
 import { Card } from '@/ui/Card';
 import { color, font, space, WIDE } from '@/ui/tokens';
 
-const FOLLOW_KM = 2;
-
 export default function Dashboard() {
-  const { place, units, followMe, setPlace } = useSettings();
+  const { place, units } = useSettings();
   const hydrated = useSettingsHydrated();
   const d = useDashboard(place, units, hydrated);
   const { width } = useWindowDimensions();
   const insets = useSafeAreaInsets();
   const wide = width >= WIDE;
-
-  useEffect(() => {
-    if (!hydrated || !followMe) return;
-    // Only switch, and only spend a reverse-geocode call, when you've actually moved.
-    currentCoords()
-      .then((here) => {
-        const saved = useSettings.getState().place;
-        if (distanceKm(saved, { ...saved, ...here }) < FOLLOW_KM) return;
-        return placeAt(here).then(setPlace);
-      })
-      .catch(() => {});
-  }, [hydrated, followMe, setPlace]);
 
   return (
     <ScrollView

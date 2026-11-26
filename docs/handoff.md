@@ -15,7 +15,7 @@ The dashboard works in the web preview against live APIs, with the review's firs
 
 ## Not verified
 
-- "Use my location" and Follow me (needs a browser location prompt answered by a person).
+- "Use my location" (needs a browser location prompt answered by a person).
 - Adding to the home screen on a phone (needs HTTPS hosting).
 - The nowcast line and AQI peak warning showing up in real weather: covered by unit tests and the code path, but neither condition happened during the check.
 - iOS build, native location and AsyncStorage hydration on native.

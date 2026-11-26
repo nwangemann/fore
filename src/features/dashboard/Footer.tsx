@@ -4,7 +4,6 @@ import { color, font, space } from '@/ui/tokens';
 const sources = [
   { label: 'Open-Meteo (CC BY 4.0)', url: 'https://open-meteo.com/' },
   { label: 'US National Weather Service', url: 'https://www.weather.gov/' },
-  { label: '© OpenStreetMap contributors', url: 'https://www.openstreetmap.org/copyright' },
 ];
 
 export function Footer() {

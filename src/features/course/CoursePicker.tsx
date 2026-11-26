@@ -5,7 +5,6 @@ import {
   Pressable,
   ScrollView,
   StyleSheet,
-  Switch,
   Text,
   TextInput,
   View,
@@ -20,7 +19,7 @@ import { color, font, radius, space } from '@/ui/tokens';
 
 /** Search for a course, use the device location, and pick units. */
 export function CoursePicker() {
-  const { place, units, followMe, recent, setPlace, setUnits, setFollowMe } = useSettings();
+  const { place, units, recent, setPlace, setUnits } = useSettings();
   const [text, setText] = useState('');
   const [results, setResults] = useState<Place[]>([]);
   const [searching, setSearching] = useState(false);
@@ -110,17 +109,6 @@ export function CoursePicker() {
       ) : null}
 
       <Card title="Clubhouse rules">
-        <View style={styles.setting}>
-          <View style={{ flex: 1 }}>
-            <Text style={styles.settingLabel}>Follow me</Text>
-            <Text style={styles.muted}>Re-read your location every time fore! opens.</Text>
-          </View>
-          <Switch
-            value={followMe}
-            onValueChange={setFollowMe}
-            trackColor={{ true: color.fairway, false: color.paperEdge }}
-          />
-        </View>
         <View style={styles.setting}>
           <Text style={[styles.settingLabel, { flex: 1 }]}>Units</Text>
           <View style={styles.segment}>

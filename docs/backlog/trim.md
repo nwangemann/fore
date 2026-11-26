@@ -2,7 +2,7 @@
 
 Goal: everything left in the repo earns its place, and nothing personal is committed.
 
-- [ ] **1.1 Cut Follow me and reverse geocoding.** Remove the Follow me setting and its effect, `placeAt`/Nominatim, and `distanceKm`. "Use my location" stays: it names the spot by coordinates, or keeps "Current location". Remove recents only if it simplifies the picker without losing the demo flow.
+- [x] **1.1 Cut Follow me and reverse geocoding.** Remove the Follow me setting and its effect, `placeAt`/Nominatim, and `distanceKm`. "Use my location" stays: it names the spot by coordinates, or keeps "Current location". Remove recents only if it simplifies the picker without losing the demo flow.
       Files: `src/state/settings.ts`, `src/services/location.ts`, `src/core/place/place.ts`, `app/index.tsx`, `src/features/course/CoursePicker.tsx`, `src/features/dashboard/Footer.tsx` (OSM credit), `docs/adr/0005-location.md`, `docs/data-sources.md`.
       Prove: check passes; in the preview, search and "Use my location" (deny the prompt) still behave.
 - [ ] **1.2 Consolidate docs.** Fold `docs/systems/*.md` into `docs/architecture.md` and drop the systems rule from `scripts/docs-check.mjs`. Fold `docs/handoff.md` into a short "State" section of this backlog's index. Move `docs/review-2026-11-25.md` to `docs/reviews/`. Mark ADR 7 (home-screen install) superseded: keep the manifest and icon, drop install claims. Update `docs/README.md`, `CLAUDE.md` and the `fore-dev` skill to match.

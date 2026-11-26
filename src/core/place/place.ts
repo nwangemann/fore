@@ -24,14 +24,3 @@ export function coordinateLabel(latitude: number, longitude: number): string {
   const lon = `${Math.abs(longitude).toFixed(2)}° ${longitude >= 0 ? 'E' : 'W'}`;
   return `${lat}, ${lon}`;
 }
-
-/** Great-circle distance in kilometres. */
-export function distanceKm(a: Place, b: Place): number {
-  const rad = Math.PI / 180;
-  const dLat = (b.latitude - a.latitude) * rad;
-  const dLon = (b.longitude - a.longitude) * rad;
-  const h =
-    Math.sin(dLat / 2) ** 2 +
-    Math.cos(a.latitude * rad) * Math.cos(b.latitude * rad) * Math.sin(dLon / 2) ** 2;
-  return 2 * 6371 * Math.asin(Math.sqrt(h));
-}
