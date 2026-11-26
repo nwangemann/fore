@@ -3,8 +3,8 @@
   "configurations": [
     {
       "name": "fore-web",
-      "runtimeExecutable": "npm",
-      "runtimeArgs": ["run", "web", "--", "--port", "8082"],
+      "runtimeExecutable": "/bin/sh",
+      "runtimeArgs": ["scripts/web-preview.sh"],
       "port": 8082
     }
   ]

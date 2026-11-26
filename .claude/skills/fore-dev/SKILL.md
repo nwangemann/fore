@@ -18,7 +18,7 @@ Node 22.13+ (or 24.3+, 26+) must be on PATH. If `node` is not found, add your No
 
 ## Preview pane
 
-`.claude/launch.json` defines `fore-web` as `npm run web -- --port 8082`, so it does not clash with another Expo app on 8081.
+`.claude/launch.json` defines `fore-web`, which runs `scripts/web-preview.sh`: it finds npm even when the pane's shell has no Node on PATH, then runs `npm run web -- --port 8082` so it does not clash with another Expo app on 8081.
 
 ## Gotchas
 
