@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View } from 'react-native';
 import type { Normal } from '@/core/climate/normals';
 import { unitLabels, type Units } from '@/core/units';
-import { condition, iconFor } from '@/core/weather/codes';
+import { condition } from '@/core/weather/codes';
 import type { Forecast } from '@/core/weather/forecast';
 import { clockLabel, minutesBetween } from '@/core/weather/localTime';
 import {
@@ -15,6 +15,7 @@ import {
 import { caddieNotes, scoreDay } from '@/core/weather/score';
 import { deg } from '@/ui/format';
 import { color, font, moodColor, radius, space } from '@/ui/tokens';
+import { WeatherIcon } from '@/ui/weather/WeatherIcon';
 
 type Props = { forecast: Forecast; units: Units; normal: Normal | null };
 
@@ -37,7 +38,7 @@ export function NowCard({ forecast, units, normal }: Props) {
   return (
     <View style={[styles.card, { backgroundColor: moodColor[sky.mood] }]}>
       <View style={styles.top}>
-        <Text style={styles.icon}>{iconFor(current.code, current.isDay)}</Text>
+        <WeatherIcon code={current.code} isDay={current.isDay} size={88} />
         <View style={{ flex: 1 }}>
           <Text style={styles.temp}>
             {deg(current.temperature)}
@@ -140,7 +141,6 @@ const shade = 'rgba(0,0,0,0.18)';
 const styles = StyleSheet.create({
   card: { borderRadius: radius.lg, padding: space.xl, gap: space.md },
   top: { flexDirection: 'row', alignItems: 'center', gap: space.lg, paddingTop: 44 },
-  icon: { fontSize: 64 },
   temp: { fontFamily: font.display, fontSize: 84, lineHeight: 100, color: color.paper },
   unit: { fontFamily: font.bold, fontSize: 28 },
   label: { fontFamily: font.bold, fontSize: 20, color: color.paper },

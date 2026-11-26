@@ -1,6 +1,5 @@
 import { StyleSheet, Text, View } from 'react-native';
 import type { Units } from '@/core/units';
-import { iconFor } from '@/core/weather/codes';
 import type { Day } from '@/core/weather/forecast';
 import { weekdayLabel } from '@/core/weather/localTime';
 import type { Normal } from '@/core/climate/normals';
@@ -8,6 +7,7 @@ import { bestDay, deltaFromC, scoreDay, scoreMark, type DayScore } from '@/core/
 import { Card } from '@/ui/Card';
 import { deg } from '@/ui/format';
 import { color, font, space } from '@/ui/tokens';
+import { WeatherIcon } from '@/ui/weather/WeatherIcon';
 
 /**
  * The week as a golf scorecard. Each day is a hole; under par is circled and
@@ -29,7 +29,13 @@ export function Scorecard({ days, units, normals }: Props) {
         <Row label="Hole">
           {week.map((d, i) => cell(i, i === 0 ? 'Today' : weekdayLabel(d.date), styles.head))}
         </Row>
-        <Row label="Sky">{week.map((d, i) => cell(i, iconFor(d.code, true), styles.icon))}</Row>
+        <Row label="Sky">
+          {week.map((d, i) => (
+            <View key={i} style={styles.cell}>
+              <WeatherIcon code={d.code} isDay size={34} />
+            </View>
+          ))}
+        </Row>
         {hasPar ? (
           <Row label="Par">
             {par.map((n, i) => cell(i, n ? deg(toUnit(n.high)) : '–', styles.par))}
@@ -120,7 +126,6 @@ const styles = StyleSheet.create({
     minWidth: 36,
   },
   head: { fontFamily: font.bold, fontSize: 12, color: color.ink },
-  icon: { fontSize: 22 },
   big: { fontFamily: font.bold, fontSize: 16, color: color.ink },
   par: { fontFamily: font.medium, fontSize: 13, color: color.fairway, fontStyle: 'italic' },
   soft: { fontFamily: font.body, fontSize: 13, color: color.inkSoft },
