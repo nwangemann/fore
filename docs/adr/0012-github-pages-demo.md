@@ -9,11 +9,12 @@ A portfolio reviewer should be able to try fore! without cloning it. The web exp
 
 ## Decision
 
-The `deploy` job in `.github/workflows/check.yml` publishes the web export to GitHub Pages at https://nwangemann.github.io/fore/. It runs only for pushes to `main`, after `check` and `e2e` pass.
+The `pages` and `deploy` jobs in `.github/workflows/check.yml` build and publish the web export to GitHub Pages at https://nwangemann.github.io/fore/. It runs only for pushes to `main`, after `check` and `e2e` pass.
 
-- A project site lives under `/fore/`. `app.config.ts` sets Expo's `experiments.baseUrl` from `FORE_BASE_URL`, which only the deploy job sets. Development, the preview and the e2e test still serve from the root.
+- A project site lives under `/fore/`. `app.config.ts` sets Expo's `experiments.baseUrl` from `FORE_BASE_URL`, which only the `pages` job sets. Development, the preview and the e2e test still serve from the root.
 - `public/index.html` and the web manifest use relative paths, so they work at the root and under `/fore/`.
-- The job copies `index.html` to `404.html`, so a deep link such as `/fore/course` loads the app instead of GitHub's 404 page.
+- Building and deploying are separate jobs: `deploy-pages` run in the same job as the upload could look the artifact up before it was listed, and fail.
+- The `pages` job copies `index.html` to `404.html`, so a deep link such as `/fore/course` loads the app instead of GitHub's 404 page.
 
 ## Consequences
 
