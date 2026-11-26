@@ -1,5 +1,7 @@
 # fore!
 
+[![check](https://github.com/nwangemann/fore/actions/workflows/check.yml/badge.svg)](https://github.com/nwangemann/fore/actions/workflows/check.yml)
+
 A small, cheeky, personal weather dashboard. The fore-cast for one home course, with golf jokes. Built with Expo for the web first.
 
 - Now: temperature, "plays like", conditions with a quip, caddie notes.

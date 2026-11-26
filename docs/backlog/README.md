@@ -1,6 +1,6 @@
 # Backlog
 
-**Next step: 2.1 Create and push** ([publish.md](publish.md)).
+**Next step: 3.1 Queries** ([tanstack-query.md](tanstack-query.md)).
 
 ## State
 
@@ -16,7 +16,7 @@ Each section is a file of session-sized steps. Do one step per session, in order
 | #   | Section                                          | Steps |
 | --- | ------------------------------------------------ | ----- |
 | 1   | [Trim scope and docs](trim.md)                   | 3/3   |
-| 2   | [Publish on GitHub](publish.md)                  | 0/1   |
+| 2   | [Publish on GitHub](publish.md)                  | 1/1   |
 | 3   | [TanStack Query data layer](tanstack-query.md)   | 0/2   |
 | 4   | [SVG weather icons](icons.md)                    | 0/2   |
 | 5   | [Resilience and accessibility](quality.md)       | 0/2   |
