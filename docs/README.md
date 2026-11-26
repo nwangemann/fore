@@ -12,6 +12,7 @@
 
 - [Backlog](backlog/README.md)
 - [Backlog state](backlog/README.md#state)
+- [How fore! was built with an AI agent](ai-workflow.md)
 - [Review and explorations, 2026-11-25](reviews/2026-11-25.md)
 - [Architecture](architecture.md)
 - [Data sources and what else is out there](data-sources.md)
