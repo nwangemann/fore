@@ -13,3 +13,11 @@ export function courseVariant(code: number, isDay: boolean): CourseVariant {
   if (mood === 'snow') return 'frost';
   return isDay ? 'day' : 'night';
 }
+
+const VARIANTS: readonly CourseVariant[] = ['day', 'night', 'frost', 'storm'];
+
+/** A variant name from outside (the `?course=` preview parameter), or null if it is not one. */
+export function parseCourseVariant(value: string | null | undefined): CourseVariant | null {
+  const v = value?.trim().toLowerCase();
+  return VARIANTS.find((x) => x === v) ?? null;
+}

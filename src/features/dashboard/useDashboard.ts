@@ -9,6 +9,7 @@ import { courseVariant, type CourseVariant } from '@/core/weather/variant';
 import { fetchAlerts } from '@/services/nws';
 import { fetchAir, fetchArchive, fetchForecast } from '@/services/openMeteo';
 import { useSettings, useSettingsHydrated } from '@/state/settings';
+import { previewVariant } from '@/ui/previewVariant';
 
 export type Dashboard = {
   forecast: Forecast | null;
@@ -50,12 +51,13 @@ function forecastQuery(place: Place, units: Units, enabled: boolean) {
 /**
  * The course variant for the home course's current sky, for the stripes in the root
  * layout. It shares the dashboard's forecast query, so it adds no request; `day` until
- * the forecast loads.
+ * the forecast loads. The `?course=` preview parameter overrides it on web.
  */
 export function useCourseVariant(): CourseVariant {
   const { place, units } = useSettings();
   const hydrated = useSettingsHydrated();
   const { data } = useQuery(forecastQuery(place, units, hydrated));
+  if (previewVariant) return previewVariant;
   return data ? courseVariant(data.current.code, data.current.isDay) : 'day';
 }
 

@@ -17,6 +17,7 @@ import { courseVariant } from '@/core/weather/variant';
 import { deg } from '@/ui/format';
 import { headingLevel } from '@/ui/a11y';
 import { Icon } from '@/ui/icons/Icon';
+import { previewVariant } from '@/ui/previewVariant';
 import { color, font, heroColor, radius, space } from '@/ui/tokens';
 import { WeatherIcon } from '@/ui/weather/WeatherIcon';
 
@@ -26,7 +27,7 @@ export function NowCard({ forecast, units, normal }: Props) {
   const { current, hours } = forecast;
   const today = forecast.days[0];
   const sky = condition(current.code);
-  const variant = courseVariant(current.code, current.isDay);
+  const variant = previewVariant ?? courseVariant(current.code, current.isDay);
   const notes = caddieNotes(current, units);
   const score = today ? scoreDay(today, units, normal) : null;
   const nowcast = nowcastLine(forecast.nowcast, sky.mood === 'snow');
