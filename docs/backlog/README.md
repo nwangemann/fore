@@ -1,12 +1,13 @@
 # Backlog
 
-**Next step: 3.1 Queries** ([tanstack-query.md](tanstack-query.md)).
+**Next step: 3.2 Persisted cache** ([tanstack-query.md](tanstack-query.md)).
 
 ## State
 
 Snapshot: 2026-11-25. The dashboard works in the web preview against live APIs.
 
-- Verified: `npm run check`; at desktop and 375 px widths for Portland, OR, every dashboard section, search and saved place, NWS alert banners and European pollen; a reload paints the cached copy and then refreshes.
+- Verified: `npm run check`; at desktop and 375 px widths for Portland, OR, every dashboard section, search and saved place, NWS alert banners and European pollen. Since 3.1 (TanStack Query), data loads, Re-tee refetches and switching place never shows the old place's data.
+- Paused until 3.2: a reload no longer paints the last visit's copy first; the persisted query cache brings it back.
 - Not verified: "Use my location" with the prompt allowed (needs a person); the nowcast line and AQI peak warning in real weather (unit-tested only); the iOS build, native location and AsyncStorage on native.
 
 ## Roadmap
@@ -17,7 +18,7 @@ Each section is a file of session-sized steps. Do one step per session, in order
 | --- | ------------------------------------------------ | ----- |
 | 1   | [Trim scope and docs](trim.md)                   | 3/3   |
 | 2   | [Publish on GitHub](publish.md)                  | 1/1   |
-| 3   | [TanStack Query data layer](tanstack-query.md)   | 0/2   |
+| 3   | [TanStack Query data layer](tanstack-query.md)   | 1/2   |
 | 4   | [SVG weather icons](icons.md)                    | 0/2   |
 | 5   | [Resilience and accessibility](quality.md)       | 0/2   |
 | 6   | [Tests at every layer](tests.md)                 | 0/3   |

@@ -10,6 +10,7 @@
 | `@expo-google-fonts/space-grotesk`          | Body font                             | OFL     | 0004 |
 | `@expo/metro-runtime`                       | Web bundling runtime                  | MIT     | 0002 |
 | `@react-native-async-storage/async-storage` | Saved settings (localStorage on web)  | MIT     | 0003 |
+| `@tanstack/react-query`                     | Remote data: caching and refetching   | MIT     | 0008 |
 | `expo`                                      | App framework                         | MIT     | 0002 |
 | `expo-constants`                            | Expo Router requirement               | MIT     | 0002 |
 | `expo-font`                                 | Loads the fonts                       | MIT     | 0004 |

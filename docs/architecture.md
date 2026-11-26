@@ -13,7 +13,7 @@ src/ui/         tokens, Card, background stripes, formatters
 ## Data flow
 
 1. `useSettings` holds the home place, units and recent places.
-2. `useDashboard(place, units)` paints the cached copy from the last visit, then fetches forecast, air and alerts in parallel, then the seasonal normals (cached per place, refetched once a year). Only a forecast failure is shown; air and alerts fail quietly. It refreshes when data is over 10 minutes old (checked each minute and when the app returns to the foreground).
+2. `useDashboard(place, units)` composes TanStack Query queries (ADR 8): forecast, air and alerts in parallel, then the seasonal normals (cached per place, refetched once a year). Only a forecast failure is shown; air and alerts fail quietly. Data is fresh for 10 minutes and refetches on an interval and when the tab or app regains focus.
 3. Open-Meteo times are place-local strings with no offset. `src/core/weather/localTime.ts` reads them as text so the viewer's time zone never shifts them.
 
 ## Features
@@ -22,7 +22,7 @@ src/ui/         tokens, Card, background stripes, formatters
 
 `src/features/dashboard`: the page header (logo, place pill, Re-tee refresh, when the card was signed), footer credits, and `useDashboard`.
 
-`useDashboard` waits for saved settings to load and paints the last good result for that place and units from the cache ("From your last visit · updating…"). Data for a previous place or unit system is never shown; a failed refresh keeps the last good forecast.
+`useDashboard` waits for saved settings to load. Every query key carries the place, so data for a previous place or unit system is never shown; a failed refresh keeps the last good forecast. The last-visit cache paint returns with the persisted query cache in step 3.2.
 
 ### Forecast
 
