@@ -10,7 +10,7 @@
 
 ## Session routine
 
-1. Read `docs/backlog/README.md`, then only the file for the task at hand. Read `docs/handoff.md` only when you need project state.
+1. Read `docs/backlog/README.md`, then only the file for the task at hand. Its "State" section is the project state.
 2. Load the `fore-dev` skill before running anything.
 3. Do one step (one checkbox). Touch only the files that step lists.
 4. Run `npm run check`, commit, tick the step, update "Next step" in the backlog index, and stop. Start the next step in a new session.

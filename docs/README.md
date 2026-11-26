@@ -10,11 +10,11 @@
 ## Index
 
 - [Backlog](backlog/README.md)
-- [Review and explorations, 2026-11-25](review-2026-11-25.md)
-- [Handoff: current state](handoff.md)
+- [Backlog state](backlog/README.md#state)
+- [Review and explorations, 2026-11-25](reviews/2026-11-25.md)
 - [Architecture](architecture.md)
 - [Data sources and what else is out there](data-sources.md)
 - [Dependencies](dependencies.md)
 - [Standards](standards.md)
-- [Systems](systems/) and [decisions](adr/)
+- [Decisions](adr/)
 - [Changelog](../CHANGELOG.md)

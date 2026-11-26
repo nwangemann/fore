@@ -1,6 +1,13 @@
 # Backlog
 
-**Next step: 1.2 Consolidate docs** ([trim.md](trim.md)).
+**Next step: 1.3 Remove personal and machine details** ([trim.md](trim.md)).
+
+## State
+
+Snapshot: 2026-11-25. The dashboard works in the web preview against live APIs.
+
+- Verified: `npm run check`; at desktop and 375 px widths for Portland, OR, every dashboard section, search and saved place, NWS alert banners and European pollen; a reload paints the cached copy and then refreshes.
+- Not verified: "Use my location" with the prompt allowed (needs a person); the nowcast line and AQI peak warning in real weather (unit-tested only); the iOS build, native location and AsyncStorage on native.
 
 ## Roadmap
 
@@ -8,7 +15,7 @@ Each section is a file of session-sized steps. Do one step per session, in order
 
 | #   | Section                                          | Steps |
 | --- | ------------------------------------------------ | ----- |
-| 1   | [Trim scope and docs](trim.md)                   | 1/3   |
+| 1   | [Trim scope and docs](trim.md)                   | 2/3   |
 | 2   | [Publish on GitHub](publish.md)                  | 0/1   |
 | 3   | [TanStack Query data layer](tanstack-query.md)   | 0/2   |
 | 4   | [SVG weather icons](icons.md)                    | 0/2   |

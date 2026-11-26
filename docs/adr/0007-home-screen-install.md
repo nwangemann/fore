@@ -1,8 +1,12 @@
 # 7. Home-screen install as a web app
 
-- Status: accepted
+- Status: superseded (2026-11-25)
 - Date: 2026-11-25
 
 ## Decision
 
-Ship a web manifest, icons and Apple touch icon through `public/`, with `public/index.html` overriding Expo's web template to link them. This makes fore! installable from the phone browser with no App Store build. Installing needs HTTPS hosting (backlog task 2). An offline service worker is left for later.
+Ship a web manifest, icons and Apple touch icon through `public/`, with `public/index.html` overriding Expo's web template to link them.
+
+## Superseded
+
+Home-screen install is no longer a goal, and fore! makes no install claims. The manifest and icons stay because they give the tab its name, icon and theme color. An offline service worker stays an idea in the backlog.
