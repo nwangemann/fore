@@ -12,7 +12,7 @@ import { AlertBanner } from '@/features/alerts/AlertBanner';
 import { Footer } from '@/features/dashboard/Footer';
 import { Header } from '@/features/dashboard/Header';
 import { useDashboard } from '@/features/dashboard/useDashboard';
-import { FrontNine } from '@/features/forecast/FrontNine';
+import { Round } from '@/features/forecast/Round';
 import { NowCard } from '@/features/forecast/NowCard';
 import { Scorecard } from '@/features/forecast/Scorecard';
 import { YardageBook } from '@/features/forecast/YardageBook';
@@ -56,7 +56,7 @@ export default function Dashboard() {
               units={units}
               normal={d.normals[d.forecast.days[0]?.date ?? ''] ?? null}
             />
-            <FrontNine hours={d.forecast.hours} />
+            <Round hours={d.forecast.hours} />
             <Scorecard days={d.forecast.days} units={units} normals={d.normals} />
           </View>
           <View style={[styles.col, wide && { flex: 1 }]}>

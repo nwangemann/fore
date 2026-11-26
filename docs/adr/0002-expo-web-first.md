@@ -5,7 +5,7 @@
 
 ## Context
 
-The user wanted a web app as the easy path, with a phone app as an option for location and other device features.
+The goal was a web app as the easy path, with a phone app as an option for location and other device features.
 
 ## Decision
 

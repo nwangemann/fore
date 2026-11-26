@@ -1,7 +1,7 @@
 {
   "name": "fore! your daily fore-cast",
   "short_name": "fore!",
-  "description": "A cheeky personal weather dashboard.",
+  "description": "A golf-themed weather dashboard.",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",

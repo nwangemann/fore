@@ -1,7 +1,7 @@
 # Standards
 
 - Strict TypeScript with `noUncheckedIndexedAccess`.
-- Components PascalCase, modules camelCase, one system doc per feature folder.
+- Components PascalCase, modules camelCase. Each feature folder has a section in `architecture.md`.
 - Colours, spacing and fonts come from `src/ui/tokens.ts`. Touch targets are at least 44 points.
 - Core logic has unit tests next to it where mistakes are easy to miss. Services are tested against recorded fixtures, and one Playwright smoke test runs the web build against the same fixtures (see Testing in `architecture.md`).
 - Conventional Commits. `npm run check` must pass, locally and in CI; CI also runs `npm run test:e2e` (see Testing in `architecture.md`).

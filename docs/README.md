@@ -2,21 +2,18 @@
 
 ## Quick start
 
-1. Node 22.13+, 24.3+ or 26+ on your PATH.
+1. Node 22.13+, 24.3+ or 26+ on PATH.
 2. `npm install`
-3. `npm run web` opens the dashboard at http://localhost:8081. `npm run ios` builds for the simulator (untested so far).
-4. `npm run check` before every commit.
-5. `npm run test:e2e` runs the end-to-end smoke test; the first time, run `npx playwright install --only-shell chromium`.
+3. `npm run web` opens the dashboard at http://localhost:8081. `npm run ios` builds for the iOS simulator (untested).
+4. `npm run check` runs before every commit (pre-commit hook) and in CI.
+5. `npm run test:e2e` runs the end-to-end smoke test. First run: `npx playwright install --only-shell chromium`.
 
 ## Index
 
-- [Backlog](backlog/README.md)
-- [Backlog state](backlog/README.md#state)
+- [Architecture](architecture.md): folders, data flow, features, testing and CI
+- [Decisions](adr/): eleven short ADRs
+- [Standards](standards.md), including accessibility
+- [Data sources](data-sources.md) and [dependencies](dependencies.md)
 - [How fore! was built with an AI agent](ai-workflow.md)
-- [Review and explorations, 2026-11-25](reviews/2026-11-25.md)
-- [Architecture](architecture.md)
-- [Data sources and what else is out there](data-sources.md)
-- [Dependencies](dependencies.md)
-- [Standards](standards.md) (including accessibility)
-- [Decisions](adr/)
-- [Changelog](../CHANGELOG.md)
+- [Backlog](backlog/README.md): roadmap, verified state and ideas
+- [Reviews](reviews/): dated reviews of the app and the process

@@ -18,7 +18,7 @@ Place is the latitude and longitude to three decimals. Because the place is in e
 
 On web TanStack Query refetches stale queries when the tab regains focus. On native, `focusManager` is wired to `AppState`.
 
-The query cache is persisted (step 3.2) with `PersistQueryClientProvider` and an AsyncStorage persister under `fore.queries` (localStorage on web). It is kept 30 days (`maxAge`); queries stay in memory for a day (`gcTime`), the archive for 30 days. The `buster` in `app/_layout.tsx` must be bumped whenever a cached data shape changes. On start the last visit's data paints at once; stale queries then refetch. `fromCache` is true while the forecast is refetching and its `dataUpdatedAt` is older than this page load, which the header shows as "From your last visit · updating…". The normals are computed from the cached archive records, so the archive is fetched once per place and year.
+The query cache is persisted with `PersistQueryClientProvider` and an AsyncStorage persister under `fore.queries` (localStorage on web). It is kept 30 days (`maxAge`); queries stay in memory for a day (`gcTime`), the archive for 30 days. The `buster` in `app/_layout.tsx` must be bumped whenever a cached data shape changes. On start the last visit's data paints at once; stale queries then refetch. `fromCache` is true while the forecast is refetching and its `dataUpdatedAt` is older than this page load, which the header shows as "From your last visit · updating…". The normals are computed from the cached archive records, so the archive is fetched once per place and year.
 
 ## Why
 
@@ -26,5 +26,5 @@ The hook had hand-rolled staleness timers, focus refresh, race guards and per-pl
 
 ## Consequences
 
-- `src/services/cache.ts` and the archive's own cache are gone; old `fore.cache.*` keys are deleted on start.
+- `src/services/cache.ts` and the archive's own cache are gone.
 - The persisted cache is about 270 KB per place with its archive, so localStorage holds a handful of places.

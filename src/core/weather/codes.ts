@@ -26,7 +26,7 @@ export type WeatherIconName =
 
 export type Condition = {
   label: string;
-  /** One cheeky line of golf talk for the hero card. */
+  /** One line of golf talk for the hero card. */
   quip: string;
   icon: { day: WeatherIconName; night: WeatherIconName };
   /** Broad group, used to theme the hero card. */

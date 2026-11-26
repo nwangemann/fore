@@ -4,10 +4,24 @@
 
 ## State
 
-Snapshot: 2026-11-25. The dashboard works in the web preview against live APIs.
+Snapshot: 2026-11-26. Every agent step on the roadmap is done; `main` passes `check` and `e2e` on GitHub.
 
-- Verified: `npm run check`; at desktop and 375 px widths for Portland, OR, every dashboard section, search and saved place, NWS alert banners and European pollen. Since 3.1 and 3.2 (TanStack Query), data loads, Re-tee refetches, switching place never shows the old place's data, a reload paints the last visit's forecast at once ("From your last visit · updating…") and the archive is fetched once per place. Since 4.1, weather conditions draw as Meteocons SVG icons in the hero, the round and the scorecard, at both widths with no layout shift. Since 4.2, no emoji remain: Meteocons UI icons label the yardage book, the sun strip and the round's rain chance, a drawn flagstick marks the header and course rows, and the bag is words only. Since 5.1, a forced render error shows the route-level "Out of bounds" card and "Play it again" recovers; a failed forecast with no cache, and offline with no cache, show an "Out of bounds" card whose Re-tee recovers; a failed refresh keeps the cached dashboard with "couldn't refresh" in the header. Since 5.2, a keyboard-only walk works: Tab reaches Change course, Re-tee, the round, the footer links, the search, its results, Use my location and the units, each with a visible two-tone focus ring; Enter and Space work on them. The accessibility tree reads one sentence per hour and per scorecard day, with headings in order; every theme text pair meets WCAG AA (ADR 10). Since 6.1, `npm test` also runs the services against recorded API fixtures, and deleting a field a parser reads fails a test. Since 6.2, `npm run test:e2e` runs the web export in headless Chromium against the same fixtures with every other request blocked (passes twice in a row; removing a fixture host fails it). Since 6.3, GitHub Actions runs `check` and `e2e` (the smoke test in Chromium) as parallel jobs on every push to `main` and every pull request; both passed on GitHub. Since 7.1, the stripes and hero follow the current sky (ADR 11): overcast at night in St Andrews shows the night palette; frost and storm were seen through a temporary local override. Every new stripe and hero colour meets 4.5:1 for paper and sand text. Since 7.2, `?course=day|night|frost|storm` forces a variant on web for one page load; day, night and frost screenshots at 1280 px are in `docs/images/`, and every card's text pairs meet AA in every variant (ADR 11). Since 8.1, `docs/ai-workflow.md` explains how the agent was steered and what it verified; its relative links resolve. Since 8.2, the README has a pitch, features, stack, a Mermaid architecture diagram, "What's interesting", run and test commands, credits and desktop and 375 px screenshots (`docs/images/course-phone.png`); it renders on GitHub with its images and diagram.
-- Not verified: "Use my location" with the prompt allowed (needs a person); a real screen reader (VoiceOver, needs a person); the nowcast line and AQI peak warning in real weather (unit-tested only); the iOS build, native location and AsyncStorage on native.
+Verified by the agent, in the web preview against live APIs and in CI:
+
+- **Dashboard:** every section at desktop and 375 px widths, place search and saved place, NWS alert banners, European pollen.
+- **Data (3.1–3.2):** Re-tee refetches; switching place never shows the old place's data; a reload paints the last visit at once, then refreshes; the archive is fetched once per place.
+- **Icons (4.1–4.2):** Meteocons SVGs with no layout shift; no emoji remain.
+- **Errors (5.1):** a render error, a failed forecast and offline with no cache each show an "Out of bounds" card that recovers; a failed refresh keeps the cached dashboard.
+- **Accessibility (5.2):** keyboard-only walk with a visible focus ring; one spoken sentence per hour and per scorecard day; every text pair at WCAG AA (ADR 10).
+- **Tests (6.1–6.3):** service tests fail when a parsed field disappears; the Playwright smoke test passes offline against fixtures; both run in CI.
+- **Theme (7.1–7.2):** the course follows the sky; `?course=` forces a variant; every card meets AA in every variant (ADR 11).
+- **Docs (8.1–8.2):** README and AI workflow render on GitHub with images and the diagram; relative links resolve.
+
+Not verified:
+
+- Needs a person ([manual checks](manual.md)): "Use my location" with the prompt allowed, a real phone, VoiceOver, a cold read of the README.
+- Unit-tested only: the nowcast line and the AQI peak warning in real weather.
+- Untested: the iOS and Android builds, native location and AsyncStorage on native.
 
 ## Roadmap
 

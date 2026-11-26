@@ -20,7 +20,7 @@ Coverage notes from the live calls:
 
 ## Not used yet: options for later
 
-These were not called in this session; check their current terms before building on them.
+These have not been tried; check their current terms before building on them.
 
 | Want                               | Candidates                                              | Catch                                                      |
 | ---------------------------------- | ------------------------------------------------------- | ---------------------------------------------------------- |

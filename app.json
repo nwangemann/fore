@@ -13,7 +13,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "backgroundColor": "#1F5C3A",
+        "backgroundColor": "#1E5B3A",
         "foregroundImage": "./assets/android-icon-foreground.png",
         "backgroundImage": "./assets/android-icon-background.png",
         "monochromeImage": "./assets/android-icon-monochrome.png"
@@ -26,8 +26,8 @@
       "bundler": "metro",
       "output": "single",
       "name": "fore!",
-      "themeColor": "#1F5C3A",
-      "description": "A cheeky personal weather dashboard."
+      "themeColor": "#1E5B3A",
+      "description": "A golf-themed weather dashboard."
     },
     "plugins": [
       "expo-router",

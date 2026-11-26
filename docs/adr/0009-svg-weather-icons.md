@@ -19,5 +19,5 @@ Emoji draw differently on every OS and browser. Meteocons is one consistent, col
 ## Consequences
 
 - Adding a code or icon means copying its SVG from the same tag, applying the same id prefix, and adding the name to `WeatherIconName`; the type check fails if the two disagree.
-- UI icons follow the same rule (backlog step 4.2): nine more Meteocons (windsock, humidity, UV index, cloudy, horizon, barometer, sunrise, sunset, raindrop) and fore!'s own flagstick, drawn in the Meteocons style, live in `src/ui/icons/uiIcons.ts` and draw through `Icon`, which is hidden from screen readers because the text beside it says the same. No emoji remain in the UI; the golf personality lives in the copy.
+- UI icons follow the same rule: nine more Meteocons (windsock, humidity, UV index, cloudy, horizon, barometer, sunrise, sunset, raindrop) and fore!'s own flagstick, drawn in the Meteocons style, live in `src/ui/icons/uiIcons.ts` and draw through `Icon`, which is hidden from screen readers because the text beside it says the same. No emoji remain in the UI; the golf personality lives in the copy.
 - The "fill" icons are pale (white clouds), so they read best on the darker hero card; on the cream cards they rely on their outlines.

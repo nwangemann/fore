@@ -24,7 +24,7 @@ Measured with the same relative-luminance script as ADR 10 (WCAG 2.x), paper and
 | frost   | `#375957` / `#3D6260`             | 6.25             | 4.65            | `#3F5A70` | 6.69          | 4.98         |
 | storm   | `#1F2B2C` / `#263436`             | 11.96            | 8.90            | `#3D2F4D` | 11.37         | 8.46         |
 
-Every pair meets 4.5:1, so body text passes as well as large text. Step 7.2 checked every other card against every variant. The paper cards (yardage book, round, scorecard, outlook, Clubhouse air, search, Out of bounds), the alert card and their insets do not change colour, so their pairs are the same in every variant; the lowest are pencil on paper 4.61, flag on paper 4.61, paper on flag (alerts) 4.61, inkSoft on sand (the round's "Now") 4.65 and pencil on white (search placeholder) 4.97. Text that sits on the stripes (header tagline, "Card signed", the alerts-failed line, the loading line, the footer) is paper or sand, covered by the table above. Nothing fell below AA, so no colour changed.
+Every pair meets 4.5:1, so body text passes as well as large text. Every other card was checked against every variant as well. The paper cards (yardage book, round, scorecard, outlook, Clubhouse air, search, Out of bounds), the alert card and their insets do not change colour, so their pairs are the same in every variant; the lowest are pencil on paper 4.61, flag on paper 4.61, paper on flag (alerts) 4.61, inkSoft on sand (the round's "Now") 4.65 and pencil on white (search placeholder) 4.97. Text that sits on the stripes (header tagline, "Card signed", the alerts-failed line, the loading line, the footer) is paper or sand, covered by the table above. Nothing fell below AA, so no colour changed.
 
 ## Consequences
 

@@ -40,9 +40,6 @@ yarn-error.*
 /ios
 /android
 
-# generated API reference
-docs/api/
-
 # Playwright
 test-results/
 playwright-report/

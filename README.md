@@ -2,14 +2,14 @@
 
 [![check](https://github.com/nwangemann/fore/actions/workflows/check.yml/badge.svg)](https://github.com/nwangemann/fore/actions/workflows/check.yml)
 
-A small, cheeky weather dashboard for one home course, with golf jokes. Built with Expo for the web first.
+A golf-themed weather dashboard for one home place. Built with Expo and Expo Router, web first, on free and keyless weather data.
 
 <p>
   <img src="docs/images/course-day.png" alt="fore! at desktop width: the hero card shows 42 °F and overcast in St Andrews over green mowing stripes" width="640">
   <img src="docs/images/course-phone.png" alt="fore! at phone width: the same hero card stacked in a single column" width="186">
 </p>
 
-fore! turns a free weather API into a golfer's fore-cast. It reads the sky for the place you call home, tells you whether today is under or over par for getting outside, which hour is the best tee time, what goes in the bag, and whether the air or a weather warning should keep you in the clubhouse. It runs in the browser with no account and no API key, remembers your course, and paints your last forecast instantly while it fetches a fresh one. The whole page changes with the weather: mown stripes by day, a night course after sunset, frost in snow, storm in thunder.
+fore! presents a forecast in golf terms. For one saved place it shows whether today is under or over par for being outside, the best two-hour window, what to wear, and whether air quality or an official warning matters. It runs in the browser with no account and no API key, remembers the chosen place, and shows the last forecast immediately while it fetches a fresh one. The page follows the current sky: mown stripes by day, a night course after sunset, frost in snow, storm in thunder.
 
 <p>
   <img src="docs/images/course-night.png" alt="Night variant: dark blue-green stripes and a navy hero card" width="400">
@@ -70,21 +70,12 @@ Needs Node 22.13+, 24.3+ or 26+.
 
 ```bash
 npm install
+npm run web        # dashboard at http://localhost:8081
+npm run check      # types, lint, formatting, unit and service tests, docs check
+npm run test:e2e   # Playwright smoke test; first run: npx playwright install --only-shell chromium
 ```
 
-```bash
-npm run web
-```
-
-```bash
-npm run check
-```
-
-```bash
-npm run test:e2e
-```
-
-`npm run web` serves the dashboard at http://localhost:8081. `npm run check` runs types, lint, formatting, unit and service tests and a docs check. `npm run test:e2e` runs the Playwright smoke test (first time: `npx playwright install --only-shell chromium`). CI runs `check` and `e2e` on every push and pull request. More in [docs/README.md](docs/README.md).
+CI runs `check` and `e2e` on every push and pull request. More in [docs/README.md](docs/README.md).
 
 ## Built with an AI agent
 

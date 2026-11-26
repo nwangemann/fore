@@ -11,7 +11,7 @@ import { color, font, radius, space } from '@/ui/tokens';
 import { WeatherIcon } from '@/ui/weather/WeatherIcon';
 
 /** The next 18 hours as a round: front nine, the turn, back nine. */
-export function FrontNine({ hours }: { hours: Hour[] }) {
+export function Round({ hours }: { hours: Hour[] }) {
   const round = hours.slice(0, 18);
   return (
     <Card title="The round" kicker="next 18 hours">

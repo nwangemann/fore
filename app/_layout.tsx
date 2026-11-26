@@ -38,11 +38,6 @@ const persistOptions = {
   maxAge: 30 * DAY_MS,
 };
 
-// The hand-rolled cache before the persister used `fore.cache.*` keys; drop the leftovers.
-void AsyncStorage.getAllKeys()
-  .then((keys) => AsyncStorage.multiRemove(keys.filter((k) => k.startsWith('fore.cache.'))))
-  .catch(() => undefined);
-
 installFocusRing();
 
 // Web refetches on tab focus by itself; native needs the app's foreground state.

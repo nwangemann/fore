@@ -6,8 +6,8 @@
 
 | Package                                     | Purpose                                              | Licence | ADR  |
 | ------------------------------------------- | ---------------------------------------------------- | ------- | ---- |
-| `@expo-google-fonts/shrikhand`              | Display font for headings and numbers                | OFL     | 0004 |
-| `@expo-google-fonts/space-grotesk`          | Body font                                            | OFL     | 0004 |
+| `@expo-google-fonts/shrikhand`              | Display font for headings and numbers                | OFL-1.1 | 0004 |
+| `@expo-google-fonts/space-grotesk`          | Body font                                            | OFL-1.1 | 0004 |
 | `@expo/metro-runtime`                       | Web bundling runtime                                 | MIT     | 0002 |
 | `@react-native-async-storage/async-storage` | Saved settings and query cache (localStorage on web) | MIT     | 0003 |
 | `@tanstack/react-query`                     | Remote data: caching and refetching                  | MIT     | 0008 |
@@ -33,18 +33,18 @@ Vendored assets (not npm packages) are listed with their licences in [THIRD_PART
 
 ## devDependencies
 
-| Package                           | Purpose               | Licence | ADR  |
-| --------------------------------- | --------------------- | ------- | ---- |
-| `@commitlint/cli`                 | Commit message check  | MIT     | 0001 |
-| `@commitlint/config-conventional` | Conventional Commits  | MIT     | 0001 |
-| `@playwright/test`                | End-to-end smoke test | Apache  | 0001 |
-| `@types/jest`                     | Test types            | MIT     | 0001 |
-| `@types/react`                    | React types           | MIT     | 0001 |
-| `eslint`                          | Lint (pinned to 9)    | MIT     | 0001 |
-| `eslint-config-expo`              | Expo lint rules       | MIT     | 0001 |
-| `eslint-config-prettier`          | Lint/format agreement | MIT     | 0001 |
-| `husky`                           | Git hooks             | MIT     | 0001 |
-| `jest`                            | Tests                 | MIT     | 0001 |
-| `jest-expo`                       | Jest preset           | MIT     | 0001 |
-| `prettier`                        | Formatting            | MIT     | 0001 |
-| `typescript`                      | Types                 | Apache  | 0001 |
+| Package                           | Purpose               | Licence    | ADR  |
+| --------------------------------- | --------------------- | ---------- | ---- |
+| `@commitlint/cli`                 | Commit message check  | MIT        | 0001 |
+| `@commitlint/config-conventional` | Conventional Commits  | MIT        | 0001 |
+| `@playwright/test`                | End-to-end smoke test | Apache-2.0 | 0001 |
+| `@types/jest`                     | Test types            | MIT        | 0001 |
+| `@types/react`                    | React types           | MIT        | 0001 |
+| `eslint`                          | Lint (pinned to 9)    | MIT        | 0001 |
+| `eslint-config-expo`              | Expo lint rules       | MIT        | 0001 |
+| `eslint-config-prettier`          | Lint/format agreement | MIT        | 0001 |
+| `husky`                           | Git hooks             | MIT        | 0001 |
+| `jest`                            | Tests                 | MIT        | 0001 |
+| `jest-expo`                       | Jest preset           | MIT        | 0001 |
+| `prettier`                        | Formatting            | MIT        | 0001 |
+| `typescript`                      | Types                 | Apache-2.0 | 0001 |
