@@ -17,5 +17,3 @@ Live demo: https://nwangemann.github.io/fore/
 - [Standards](standards.md), including accessibility
 - [Data sources](data-sources.md) and [dependencies](dependencies.md)
 - [How fore! was built with an AI agent](ai-workflow.md)
-- [Backlog](backlog/README.md): roadmap, verified state and ideas
-- [Reviews](reviews/): dated reviews of the app and the process

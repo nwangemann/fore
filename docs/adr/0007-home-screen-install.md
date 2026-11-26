@@ -9,4 +9,4 @@ Ship a web manifest, icons and Apple touch icon through `public/`, with `public/
 
 ## Superseded
 
-Home-screen install is no longer a goal, and fore! makes no install claims. The manifest and icons stay because they give the tab its name, icon and theme color. An offline service worker stays an idea in the backlog.
+Home-screen install is no longer a goal, and fore! makes no install claims. The manifest and icons stay because they give the tab its name, icon and theme color. An offline service worker remains a possible later addition.

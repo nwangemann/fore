@@ -79,6 +79,10 @@ npm run test:e2e   # Playwright smoke test; first run: npx playwright install --
 
 CI runs `check` and `e2e` on every push and pull request; green pushes to `main` deploy the live demo to GitHub Pages ([ADR 12](docs/adr/0012-github-pages-demo.md)). More in [docs/README.md](docs/README.md).
 
+## Status
+
+Version 1.0.0. Everything a browser and CI can show has been checked: every section at desktop and phone widths against the live APIs, place search, alerts, error and offline states, a keyboard-only walk and contrast in every course variant. Not yet checked: "Use my location" with the browser prompt allowed, a real phone, a VoiceOver pass, the nowcast line and AQI peak warning in real weather (unit-tested only), and the iOS and Android builds.
+
 ## Built with an AI agent
 
 fore! was built largely by an AI coding agent, steered by project instructions, a skill, ADRs and a backlog of session-sized steps. [docs/ai-workflow.md](docs/ai-workflow.md) explains how, and what was verified by the agent versus left to a person.

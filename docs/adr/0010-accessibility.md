@@ -41,4 +41,4 @@ Pairs that already passed: paper on fairway 7.45, sand on fairway 5.54, ink on p
 
 - A new colour pair, or a change to a token, needs its contrast checked against these thresholds.
 - The fog and cloud skies are now close in tone; the icon and label tell them apart.
-- A real screen-reader pass (VoiceOver) is a manual check in `docs/backlog/manual.md`.
+- A real screen-reader pass (VoiceOver) has not been done yet; it needs a person.

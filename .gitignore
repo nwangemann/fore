@@ -43,3 +43,6 @@ yarn-error.*
 # Playwright
 test-results/
 playwright-report/
+
+# Process notes: plans, backlogs, handoffs, reviews (local only)
+/dev/

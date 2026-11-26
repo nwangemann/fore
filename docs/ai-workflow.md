@@ -11,16 +11,16 @@ The agent reads these at the start of every session. Each one exists because it 
 - [The `fore-dev` skill](../.claude/skills/fore-dev/SKILL.md): how to run, check and preview the app, plus the gotchas that cost time once (the React Compiler lint rule, the transparent navigator background, the localStorage key that holds settings).
 - [`.claude/launch.json`](../.claude/launch.json): the `fore-web` preview server, so the agent can open the dashboard in its own browser pane (port 8082, or the next free one).
 - [Architecture decision records](adr/): twelve short ADRs, from tooling to the live demo. A later session reads the decision instead of re-deciding it.
-- [The backlog](backlog/README.md): the roadmap as session-sized steps, and a "State" section that records what has been verified and what has not. This is the project's memory between sessions.
+- The backlog: the roadmap as session-sized steps, and a "State" section that records what has been verified and what has not. This is the project's memory between sessions. It and the dated reviews are working notes kept outside the repository, in a git-ignored `dev/` folder, so the repository holds only the project and its documentation.
 - [The pre-commit hook](../.husky/pre-commit) runs `npm run check` (types, lint, formatting, unit tests and [`docs-check.mjs`](../scripts/docs-check.mjs)), and the [commit-msg hook](../.husky/commit-msg) enforces Conventional Commits. A commit that fails the checks does not land. `docs:check` is deliberately small: it fails when [`dependencies.md`](dependencies.md) and `package.json` disagree.
 - [CI](../.github/workflows/check.yml) runs the same `check` job, plus an `e2e` job, on every push to `main` and every pull request, and deploys the live demo from `main` once both pass.
 
 ## The loop: build, review, choose a batch, implement
 
 1. **Build.** The first commit was a working v0.1 dashboard.
-2. **Self-review.** The agent used the live dashboard for two real places and wrote a dated review: [Review and explorations, 2026-11-25](reviews/2026-11-25.md). It records what works, what doesn't make sense yet (an absolute golf score is "over par" all winter, rain shown as a percentage with no timing), sixteen feature ideas with effort estimates, and a suggested next batch.
-3. **Choose a batch.** The review ends with a suggested batch and questions for the person. That batch (seasonal par, rain timing, cache-first loading, home-screen install, and the small fixes) became one commit, and the review's status line says so.
-4. **Implement, then plan the next round.** The rest became the [roadmap](backlog/README.md#roadmap): trim scope, publish, TanStack Query, SVG icons, resilience and accessibility, tests, the weather-driven course, and this page. Ideas that weren't chosen sit under "Ideas (not planned)" rather than creeping into the current step.
+2. **Self-review.** The agent used the live dashboard for two real places and wrote a dated review. It recorded what works, what doesn't make sense yet (an absolute golf score is "over par" all winter, rain shown as a percentage with no timing), sixteen feature ideas with effort estimates, and a suggested next batch.
+3. **Choose a batch.** The review ends with a suggested batch and questions for the person. That batch (seasonal par, rain timing, cache-first loading, home-screen install, and the small fixes) became one commit.
+4. **Implement, then plan the next round.** The rest became the roadmap: trim scope, publish, TanStack Query, SVG icons, resilience and accessibility, tests, the weather-driven course, and this page. Ideas that weren't chosen sit under "Ideas (not planned)" rather than creeping into the current step.
 
 ## One step per session
 
@@ -43,15 +43,15 @@ The roadmap steps were run as separate agent sessions: a coordinating session st
 - **Contrast.** A small WCAG luminance script, run during the session rather than kept in the repo, checked every text and background pair. The numbers are recorded in [ADR 10](adr/0010-accessibility.md) and [ADR 11](adr/0011-course-variants.md) and in the commit messages.
 - **Screenshots.** Day, night and frost course variants, captured from the preview with the `?course=` parameter, in [`docs/images/`](images/).
 
-The backlog's [State](backlog/README.md#state) section lists all of this step by step, with a "Not verified" line next to it.
+The backlog's State section lists all of this step by step, with a "Not verified" line next to it.
 
 ## What was left to a person
 
-Some things a browser pane can't judge. They are collected in [Manual checks](backlog/manual.md), which is deliberately the last section and never blocks other work:
+Some things a browser pane can't judge. They are collected in a manual-checks section of the backlog, which is deliberately the last section and never blocks other work:
 
 - allowing "Use my location" in a real browser and seeing the dashboard move;
 - looking the app over on a real phone;
 - a real screen reader pass with VoiceOver on macOS and iOS;
 - reading the README cold, as a reviewer would.
 
-The iOS and Android builds are untested, and the nowcast line and AQI peak warning have only been seen in unit tests, not in real weather. The backlog says so rather than claiming otherwise.
+The iOS and Android builds are untested, and the nowcast line and AQI peak warning have only been seen in unit tests, not in real weather.
