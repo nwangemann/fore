@@ -1,23 +1,7 @@
-# Backlog
+# 8. README and AI workflow
 
-**Next step: pick from the queue.**
+Goal: a reviewer understands what fore! is, how it's built, and how it was built with an AI agent, in under a minute.
 
-## Queue
-
-| #   | Task                       | Notes                                                                                                             |
-| --- | -------------------------- | ----------------------------------------------------------------------------------------------------------------- |
-| 1   | Set the real home course   | Pick it once in the app, or change `DEFAULT_PLACE` in `src/core/place/place.ts`.                                  |
-| 2   | Host it                    | `npx expo export -p web` gives a static site with the manifest; installing needs HTTPS. Decide public or private. |
-| 3   | US pollen                  | Needs a keyed API (see data sources) and a tiny proxy to hold the key.                                            |
-| 4   | Precipitation radar        | RainViewer tiles, or NWS radar images for the US.                                                                 |
-| 5   | Daily detail sheet         | Tap a scorecard day for its hourly breakdown.                                                                     |
-| 6   | Moon phase and golden hour | Computable offline; no new source.                                                                                |
-| 7   | Course follows the weather | Night, frost and storm versions of the stripes (review exploration 13).                                           |
-| 8   | Quip variety and Mulligan  | Several quips per condition, rotated daily; a re-roll button (explorations 14–15).                                |
-| 9   | Offline service worker     | Cache the app shell so the home-screen app opens with no signal.                                                  |
-| 10  | Manual checks (last)       | Location prompt and Follow me in a real browser; add to home screen on a phone; iOS build if native is wanted.    |
-
-## Rules
-
-- Manual checks stay last and never hold up other work.
-- When a task is done, add a line to the changelog and remove its row.
+- [ ] **8.1 AI workflow doc.** `docs/ai-workflow.md`: how CLAUDE.md, AGENTS.md, the `fore-dev` skill, ADRs, the backlog and the pre-commit check steer the agent; the build → self-review → choose a batch → implement loop, linking the dated review in `docs/reviews/` as a worked example; what was verified by the agent and what was left to a person.
+- [ ] **8.2 Portfolio README.** Hero screenshots at desktop and phone width (captured from the preview into `docs/images/`), one-paragraph pitch, features, stack, a Mermaid architecture diagram (core, services, features), "What's interesting" (seasonal par, place-local time, cache-first loading, layered tests), run and test commands, CI badge, data credits, licence.
+      Prove: the README renders correctly on GitHub, images included.
